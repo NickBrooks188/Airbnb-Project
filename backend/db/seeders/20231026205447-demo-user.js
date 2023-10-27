@@ -2,6 +2,8 @@
 
 const bcrypt = require("bcryptjs");
 
+const { User } = require('../models')
+
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
@@ -20,13 +22,13 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert(options, [{
+    await User.bulkCreate([{
       email: 'test@gmail.com',
       username: 'testuser',
       firstName: 'Test',
       lastName: 'Testman',
       hashedPassword: bcrypt.hashSync('password')
-    }])
+    }], { validate: true })
   },
 
   async down(queryInterface, Sequelize) {
