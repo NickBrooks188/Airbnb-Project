@@ -1,14 +1,32 @@
 'use strict';
 
-const bcrypt = require("bcryptjs");
-
-const { User } = require('../models')
-
 let options = {};
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
-options.tableName = 'Users'
+options.tableName = 'Reviews'
+
+const { Review } = require('../models')
+
+const reviews = [{
+  spotId: 1,
+  userId: 1,
+  review: 'This totally is not my own spot!',
+  stars: 5
+},
+{
+  spotId: 2,
+  userId: 1,
+  review: 'Really great!',
+  stars: 4
+},
+{
+  spotId: 3,
+  userId: 1,
+  review: 'Love the view!',
+  stars: 3
+}]
+
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -22,13 +40,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await User.bulkCreate([{
-      email: 'test@gmail.com',
-      username: 'testuser',
-      firstName: 'Test',
-      lastName: 'Testman',
-      hashedPassword: bcrypt.hashSync('password')
-    }], { validate: true })
+    await Review.bulkCreate(reviews, { validate: true })
   },
 
   async down(queryInterface, Sequelize) {
@@ -38,10 +50,9 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      username: { [Op.in]: ['testuser'] }
+      userId: { [Op.in]: [1] }
     }, {});
   }
 };
