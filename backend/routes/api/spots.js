@@ -9,8 +9,43 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
+router.get('/:id', async (req, res) => {
+    let spot = await Spot.findByPk(req.params.id, {
+        include: [{
+            model: User,
+            attributes: ['id'],
+            through: {
+                model: Review,
+                attributes: ['stars']
+            }
+        }, {
+            model: SpotImage,
+            attributes: ['id', 'url', 'preview']
+        }, {
+            model: User,
+            as: 'Owner',
+            attributes: ['id', 'firstName', 'lastName']
+        }]
+    })
+
+    if (!spot) {
+        res.statusCode = 404
+        return res.json({ 'message': 'Spot does not exist' })
+    }
+    spot = await spot.toJSON()
+    const ratingCount = spot.Users.length
+    spot.numReviews = ratingCount
+    let ratingSum = 0
+    for (let user of spot.Users) {
+        ratingSum += user.Review.stars
+    }
+    spot.avgRating = (ratingSum / ratingCount)
+    delete spot.Users
+
+    res.json(spot)
+})
+
 router.get('/', async (req, res) => {
-    console.log('here')
     const spots = await Spot.findAll({
         include: [{
             model: User,
