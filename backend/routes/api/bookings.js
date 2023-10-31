@@ -50,4 +50,30 @@ router.get('/current', requireAuth, async (req, res) => {
     res.json(result)
 })
 
+router.delete('/:id', requireAuth, async (req, res) => {
+    const userId = req.user.id
+    const booking = await Booking.findByPk(req.params.id, {
+    })
+    if (!booking) {
+        res.statusCode = 404
+        return res.json({ "message": "Booking does not exist" })
+    }
+    const spot = await Spot.findByPk(booking.spotId)
+    bookingStart = booking.startDate.getTime()
+    const now = Date.now()
+
+    if (bookingStart < now) {
+        res.statusCode = 400
+        res.json({ "message": "Booking startDate has already passed" })
+    }
+    else if (booking.userId === userId || spot.ownerId === userId) {
+        await booking.destroy()
+        res.json({ 'message': "Successfully deleted booking" })
+    } else {
+        res.statusCode = 400
+        res.json({ "message": "You do not own this booking" })
+    }
+    res.json()
+})
+
 module.exports = router;

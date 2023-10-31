@@ -232,6 +232,8 @@ router.delete('/:id', requireAuth, async (req, res) => {
     }
 })
 
+
+
 router.get('/:id', async (req, res) => {
     let spot = await Spot.findByPk(req.params.id, {
         include: [{

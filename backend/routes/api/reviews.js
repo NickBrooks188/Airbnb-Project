@@ -37,9 +37,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
         res.statusCode = 404
         return res.json({ "message": "Review does not exist" })
     }
-    console.log(review)
     if (review.userId === userId) {
-        // delete the spot and send a message
         await review.destroy()
         res.json({ 'message': "Successfully deleted review" })
     } else {
