@@ -45,7 +45,6 @@ router.put('/:id', requireAuth, async (req, res) => {
         review.stars = update.stars || review.stars
         review.updatedAt = now
         try {
-            console.log(review)
             await review.validate()
             await review.save()
             res.json(review)

@@ -50,6 +50,35 @@ router.get('/current', requireAuth, async (req, res) => {
     res.json(result)
 })
 
+router.put('/:id', requireAuth, async (req, res) => {
+    let booking = await Booking.findByPk(req.params.id)
+    if (!booking) {
+        res.statusCode = 404
+        return res.json({ 'message': 'Booking does not exist' })
+    }
+    const update = req.body
+
+    if (req.user.id === booking.userId) {
+        let now = new Date()
+        booking.userId = update.userId || booking.userId
+        booking.spotId = update.spotId || booking.spotId
+        booking.startDate = update.startDate || booking.startDate
+        booking.endDate = update.endDate || booking.endDate
+        booking.updatedAt = now
+        try {
+            await booking.validate()
+            await booking.save()
+            res.json(booking)
+        } catch (e) {
+            res.statusCode = 400
+            res.json(e)
+        }
+    } else {
+        res.statusCode = 400
+        return res.json({ 'message': 'You are not the owner of this booking' })
+    }
+})
+
 router.delete('/:id', requireAuth, async (req, res) => {
     const userId = req.user.id
     const booking = await Booking.findByPk(req.params.id, {
