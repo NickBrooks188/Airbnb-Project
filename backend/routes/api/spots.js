@@ -252,6 +252,7 @@ router.get('/:id', async (req, res) => {
     res.json(spot)
 })
 
+
 router.get('/', async (req, res) => {
     const spots = await Spot.findAll({
         include: [{
