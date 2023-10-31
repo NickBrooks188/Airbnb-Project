@@ -254,6 +254,7 @@ router.put('/:id', requireAuth, async (req, res) => {
         spot.price = update.price || spot.price
         spot.updatedAt = now
         try {
+            await spot.validate()
             await spot.save()
             res.json(spot)
         } catch (e) {
