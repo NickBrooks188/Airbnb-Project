@@ -10,7 +10,6 @@ const { handleValidationErrors } = require('../../utils/validation');
 const router = express.Router();
 
 router.get('/current', requireAuth, async (req, res) => {
-    console.log('here')
     const userId = req.user.id
     const bookings = await Spot.findAll({
         include: [{
@@ -32,7 +31,6 @@ router.get('/current', requireAuth, async (req, res) => {
             }
         }]
     })
-    console.log(bookings)
 
     let result = []
     for (let booking of bookings) {

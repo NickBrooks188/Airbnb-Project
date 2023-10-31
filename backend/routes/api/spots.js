@@ -139,16 +139,15 @@ router.get('/:id/bookings', requireAuth, async (req, res) => {
             }
         }
     })
+    if (!bookings) {
+        res.statusCode = 404
+        return res.json({ 'message': 'Spot does not exist' })
+    }
 
     let owner = false
     if (req.user.id === bookings.ownerId) owner = true
 
 
-    if (!bookings) {
-        res.statusCode = 404
-        return res.json({ 'message': 'Spot does not exist' })
-    }
-    console.log(bookings.Users)
     let result = []
     for (let booking of bookings.Users) {
         booking = await booking.toJSON()
@@ -190,19 +189,18 @@ router.get('/current', requireAuth, async (req, res) => {
         },
         {
             model: SpotImage,
-            attributes: ['url'],
-            where: {
-                preview: true
-            }
+            attributes: ['url', 'preview'],
         }]
     })
-
     let result = []
     for (let spot of spots) {
         spot = await spot.toJSON()
         let temp = {}
         let imageURL
-        if (spot.SpotImages[0]) imageURL = spot.SpotImages[0].url
+        for (let spotImage of spot.SpotImages) {
+            if (spotImage.preview) imageURL = SpotImage.url
+            break
+        }
         let reviewCount = spot.Users.length
         let reviewSum = 0
         for (let review of spot.Users) {
@@ -217,6 +215,21 @@ router.get('/current', requireAuth, async (req, res) => {
     }
 
     res.json(result)
+})
+
+router.delete('/:id', requireAuth, async (req, res) => {
+    const spot = await Spot.findByPk(req.params.id)
+    if (!spot) {
+        res.statusCode = 404
+        return res.json({ 'message': 'Spot does not exist' })
+    }
+    if (req.user.id === spot.ownerId) {
+        await spot.destroy()
+        res.json({ 'message': 'successful deletion' })
+    } else {
+        res.statusCode = 400
+        return res.json({ 'message': 'You are not the owner of this spot' })
+    }
 })
 
 router.get('/:id', async (req, res) => {
@@ -239,7 +252,6 @@ router.get('/:id', async (req, res) => {
         return res.json({ 'message': 'Spot does not exist' })
     }
     spot = await spot.toJSON()
-    console.log(spot)
     const ratingCount = spot.Reviews.length
     spot.numReviews = ratingCount
     let ratingSum = 0
