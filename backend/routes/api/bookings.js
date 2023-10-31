@@ -23,9 +23,6 @@ router.get('/current', requireAuth, async (req, res) => {
                 model: Booking,
                 attributes: ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt']
             },
-            //     // include: {
-            //     //     model: SpotImage
-            //     // }
         },
         {
             model: SpotImage,
@@ -41,7 +38,7 @@ router.get('/current', requireAuth, async (req, res) => {
     for (let booking of bookings) {
         booking = await booking.toJSON()
         let temp = {}
-        temp = booking.Users[0].Review
+        temp = booking.Users[0].Booking
         temp.Spot = {}
         let imageURL
         if (booking.SpotImages[0]) imageURL = booking.SpotImages[0].url
