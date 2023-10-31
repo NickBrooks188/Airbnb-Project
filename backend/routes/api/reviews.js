@@ -29,4 +29,23 @@ router.get('/current', requireAuth, async (req, res) => {
     res.json(reviews)
 })
 
+router.delete('/:id', requireAuth, async (req, res) => {
+    const userId = req.user.id
+    const review = await Review.findByPk(req.params.id, {
+    })
+    if (!review) {
+        res.statusCode = 404
+        return res.json({ "message": "Review does not exist" })
+    }
+    console.log(review)
+    if (review.userId === userId) {
+        // delete the spot and send a message
+        await review.destroy()
+        res.json({ 'message': "Successfully deleted review" })
+    } else {
+        res.statusCode = 400
+        res.json({ "message": "You do not own this review" })
+    }
+})
+
 module.exports = router;
