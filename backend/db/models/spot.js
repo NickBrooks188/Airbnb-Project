@@ -13,18 +13,16 @@ module.exports = (sequelize, DataTypes) => {
       Spot.belongsToMany(models.User, {
         through: models.Booking,
         foreignKey: 'spotId',
-        otherKey: 'userId',
-        as: 'Owner'
-      })
-
-      Spot.belongsToMany(models.User, {
-        through: models.Review,
-        foreignKey: 'spotId',
         otherKey: 'userId'
       })
 
+      Spot.hasMany(models.Review, {
+        foreignKey: 'spotId'
+      })
+
       Spot.belongsTo(models.User, {
-        foreignKey: 'ownerId'
+        foreignKey: 'ownerId',
+        as: 'Owner'
       })
 
       Spot.hasMany(models.SpotImage, {
@@ -76,6 +74,9 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Spot',
+    defaultScope: {
+      attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', 'lat', 'lng', 'name', 'price']
+    }
   });
   return Spot;
 };

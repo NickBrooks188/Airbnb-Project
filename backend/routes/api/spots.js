@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
 const { Spot, Review, SpotImage, User, ReviewImage, Booking } = require('../../db/models');
 
 const { check } = require('express-validator');
@@ -17,10 +17,10 @@ router.get('/:id/reviews', async (req, res) => {
         res.statusCode = 404
         return res.json({ 'message': 'Spot does not exist' })
     }
-    // const reviews = await Spot.getReviews()
-    // const reviews = await Review.findAll({
-    //     include: [ReviewImage]
-    // })
+    const reviewtest = await Review.findAll({
+        include: [ReviewImage]
+    })
+    // console.log(reviews)
 
     // query for all reviews with specified attributes
     const reviews = await Review.findAll({
@@ -122,20 +122,14 @@ router.get('/:id/reviews', async (req, res) => {
     return res.json(results)
 })
 
-router.get('/:id/bookings', async (req, res) => {
+router.get('/:id/bookings', requireAuth, async (req, res) => {
     // check if user is logged in
     // check if user is owner of spot
-    let owner = true
-    let bookingAttributes = []
-    let userAttributes = ['id']
-    if (owner) {
-        bookingAttributes = ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt']
-        userAttributes = ['id', 'firstName', 'lastName']
-    } else {
-        bookingAttributes = ['spotId', 'startDate', 'endDate']
-    }
+
+    let bookingAttributes = ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt']
+    let userAttributes = ['id', 'firstName', 'lastName']
     const bookings = await Spot.findByPk(req.params.id, {
-        attributes: [],
+        attributes: ['ownerId'],
         include: {
             model: User,
             attributes: userAttributes,
@@ -146,7 +140,9 @@ router.get('/:id/bookings', async (req, res) => {
         }
     })
 
-    console.log(bookings)
+    let owner = false
+    if (req.user.id === bookings.ownerId) owner = true
+
 
     if (!bookings) {
         res.statusCode = 404
@@ -172,10 +168,53 @@ router.get('/:id/bookings', async (req, res) => {
             temp.User.lastName = booking.lastName
         }
 
-
         result.push(temp)
     }
 
+    res.json(result)
+})
+
+router.get('/current', requireAuth, async (req, res) => {
+    const userId = req.user.id
+    const spots = await Spot.findAll({
+        where: {
+            ownerId: userId
+        },
+        include: [{
+            model: User,
+            attributes: ['id'],
+            through: {
+                model: Review,
+                attributes: ['stars']
+            }
+        },
+        {
+            model: SpotImage,
+            attributes: ['url'],
+            where: {
+                preview: true
+            }
+        }]
+    })
+
+    let result = []
+    for (let spot of spots) {
+        spot = await spot.toJSON()
+        let temp = {}
+        let imageURL
+        if (spot.SpotImages[0]) imageURL = spot.SpotImages[0].url
+        let reviewCount = spot.Users.length
+        let reviewSum = 0
+        for (let review of spot.Users) {
+            reviewSum += review.Review.stars
+        }
+        delete spot.Users
+        delete spot.SpotImages
+        temp = spot
+        temp.avgRating = reviewSum / reviewCount
+        temp.previewImage = imageURL
+        result.push(temp)
+    }
 
     res.json(result)
 })
@@ -222,6 +261,7 @@ router.get('/', async (req, res) => {
             model: User,
             attributes: ['id'],
             through: {
+                model: Review,
                 attributes: ['stars']
             }
         }, {
