@@ -206,7 +206,7 @@ router.get('/current', requireAuth, async (req, res) => {
         let reviewCount = spot.Users.length
         let reviewSum = 0
         for (let review of spot.Users) {
-            reviewSum += review.Review.stars
+            reviewSum += review.Booking.stars
         }
         delete spot.Users
         delete spot.SpotImages
