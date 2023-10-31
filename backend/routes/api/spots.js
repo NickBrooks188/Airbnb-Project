@@ -232,7 +232,39 @@ router.delete('/:id', requireAuth, async (req, res) => {
     }
 })
 
+router.put('/:id', requireAuth, async (req, res) => {
+    let spot = await Spot.findByPk(req.params.id)
+    if (!spot) {
+        res.statusCode = 404
+        return res.json({ 'message': 'Spot does not exist' })
+    }
+    const update = req.body
 
+    if (req.user.id === spot.ownerId) {
+        let now = new Date()
+        spot.ownerId = update.ownerId || spot.ownerId
+        spot.address = update.address || spot.address
+        spot.city = update.city || spot.city
+        spot.state = update.state || spot.state
+        spot.country = update.country || spot.country
+        spot.lat = update.lat || spot.lat
+        spot.lng = update.lng || spot.lng
+        spot.name = update.name || spot.name
+        spot.description = update.description || spot.description
+        spot.price = update.price || spot.price
+        spot.updatedAt = now
+        try {
+            await spot.save()
+            res.json(spot)
+        } catch (e) {
+            res.statusCode = 400
+            res.json(e)
+        }
+    } else {
+        res.statusCode = 400
+        return res.json({ 'message': 'You are not the owner of this spot' })
+    }
+})
 
 router.get('/:id', async (req, res) => {
     let spot = await Spot.findByPk(req.params.id, {
