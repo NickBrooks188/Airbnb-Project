@@ -148,12 +148,12 @@ router.get('/:id/bookings', requireAuth, async (req, res) => {
         res.statusCode = 404
         return res.json({ 'message': 'Spot does not exist' })
     }
-
+    console.log(bookings.Users)
     let result = []
     for (let booking of bookings.Users) {
         booking = await booking.toJSON()
         const temp = {}
-        const bookingDetails = booking.Review
+        const bookingDetails = booking.Booking
         temp.spotId = bookingDetails.spotId
         temp.startDate = bookingDetails.startDate
         temp.endDate = bookingDetails.endDate
@@ -222,12 +222,8 @@ router.get('/current', requireAuth, async (req, res) => {
 router.get('/:id', async (req, res) => {
     let spot = await Spot.findByPk(req.params.id, {
         include: [{
-            model: User,
-            attributes: ['id'],
-            through: {
-                model: Review,
-                attributes: ['stars']
-            }
+            model: Review,
+            attributes: ['stars'],
         }, {
             model: SpotImage,
             attributes: ['id', 'url', 'preview']
@@ -243,14 +239,15 @@ router.get('/:id', async (req, res) => {
         return res.json({ 'message': 'Spot does not exist' })
     }
     spot = await spot.toJSON()
-    const ratingCount = spot.Users.length
+    console.log(spot)
+    const ratingCount = spot.Reviews.length
     spot.numReviews = ratingCount
     let ratingSum = 0
-    for (let user of spot.Users) {
-        ratingSum += user.Review.stars
+    for (let review of spot.Reviews) {
+        ratingSum += review.stars
     }
     spot.avgRating = (ratingSum / ratingCount)
-    delete spot.Users
+    delete spot.Reviews
 
     res.json(spot)
 })
@@ -258,38 +255,33 @@ router.get('/:id', async (req, res) => {
 router.get('/', async (req, res) => {
     const spots = await Spot.findAll({
         include: [{
-            model: User,
-            attributes: ['id'],
-            through: {
-                model: Review,
-                attributes: ['stars']
-            }
+            model: Review,
+            attributes: ['stars'],
         }, {
             model: SpotImage,
             attributes: ['url', 'preview']
         }]
     })
 
-    let spotArr = []
+    let result = []
     for (let spot of spots) {
         spot = await spot.toJSON()
         for (let spotImage of spot.SpotImages) {
-            console.log(spotImage.preview)
             if (spotImage.preview === true) {
                 spot.previewImage = spotImage.url
             }
         }
-        const ratingCount = spot.Users.length
+        const ratingCount = spot.Reviews.length
         let ratingSum = 0
-        for (let user of spot.Users) {
-            ratingSum += user.Review.stars
+        for (let review of spot.Reviews) {
+            ratingSum += review.stars
         }
         spot.avgRating = (ratingSum / ratingCount)
         delete spot.SpotImages
-        delete spot.Users
-        spotArr.push(spot)
+        delete spot.Reviews
+        result.push(spot)
     }
-    res.json(spotArr)
+    res.json(result)
 })
 
 module.exports = router;
