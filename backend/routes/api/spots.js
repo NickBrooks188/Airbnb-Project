@@ -300,6 +300,22 @@ router.get('/:id', async (req, res) => {
 })
 
 
+router.post('/', requireAuth, async (req, res) => {
+    const body = req.body
+    console.log(body)
+    body.ownerId = req.user.id
+    const spot = await Spot.build(body)
+    try {
+        await spot.validate()
+        await spot.save()
+        res.json(spot)
+    } catch (e) {
+        res.statusCode = 400
+        res.json(e)
+    }
+})
+
+
 router.get('/', async (req, res) => {
     const spots = await Spot.findAll({
         include: [{
