@@ -379,6 +379,12 @@ router.post('/', requireAuth, async (req, res) => {
 
 
 router.get('/', async (req, res) => {
+    const queries = req.query
+    console.log(queries)
+    let where = {}
+    if (queries.minLat) {
+        where
+    }
     const spots = await Spot.findAll({
         include: [{
             model: Review,
