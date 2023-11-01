@@ -11,6 +11,59 @@ const router = express.Router();
 
 const { Op } = require("sequelize");
 
+router.post('/:id/images', requireAuth, async (req, res) => {
+    const ownerId = req.user.id
+
+    const spot = await Spot.findByPk(req.params.id)
+    if (!spot) {
+        res.statusCode = 404
+        return res.json({ 'message': 'Spot does not exist' })
+    }
+    if (ownerId !== spot.ownerId) {
+        res.statusCode = 400
+        return res.json({ 'message': 'You are not the owner of this spot' })
+    }
+    const body = req.body
+    try {
+        const image = await spot.createSpotImage(body)
+        const responseData = {}
+        responseData.id = image.id
+        responseData.url = image.url
+        responseData.preview = image.preview
+        res.json(responseData)
+    } catch (e) {
+        res.statusCode = 400
+        res.json(e)
+    }
+})
+
+router.post('/:id/reviews', requireAuth, async (req, res) => {
+    const userId = req.user.id
+
+    const spot = await Spot.findByPk(req.params.id, {
+        include: [Review]
+    })
+    if (!spot) {
+        res.statusCode = 404
+        return res.json({ 'message': 'Spot does not exist' })
+    }
+    for (existingReview of spot.Reviews) {
+        if (existingReview.userId === userId) {
+            res.statusCode = 403
+            return res.json({ 'message': 'You have already written a review for this spot' })
+        }
+    }
+    const body = req.body
+    body.userId = userId
+    try {
+        const review = await spot.createReview(body)
+        res.json(review)
+    } catch (e) {
+        res.statusCode = 400
+        res.json(e)
+    }
+})
+
 router.get('/:id/reviews', async (req, res) => {
     const spot = await Spot.findByPk(req.params.id)
     if (!spot) {
