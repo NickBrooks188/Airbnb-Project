@@ -9,6 +9,37 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
+router.post('/:id/images', requireAuth, async (req, res) => {
+    const userId = req.user.id
+
+    const review = await Review.findByPk(req.params.id, {
+        include: [ReviewImage]
+    })
+    if (!review) {
+        res.statusCode = 404
+        return res.json({ 'message': 'Review does not exist' })
+    }
+    if (review.ReviewImages.length > 9) {
+        res.statusCode = 403
+        return res.json({ 'message': 'This review already has the maximum number of images' })
+    }
+    if (review.userId !== userId) {
+        res.statusCode = 403
+        return res.json({ 'message': 'You do not own this review' })
+    }
+    const body = req.body
+    try {
+        const reviewImage = await review.createReviewImage(body)
+        const returnData = {}
+        returnData.id = reviewImage.id
+        returnData.url = reviewImage.url
+        res.json(returnData)
+    } catch (e) {
+        res.statusCode = 400
+        res.json(e)
+    }
+})
+
 router.get('/current', requireAuth, async (req, res) => {
     const userId = req.user.id
 

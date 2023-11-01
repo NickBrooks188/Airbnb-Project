@@ -64,6 +64,48 @@ router.post('/:id/reviews', requireAuth, async (req, res) => {
     }
 })
 
+router.post('/:id/bookings', requireAuth, async (req, res) => {
+    const userId = req.user.id
+
+    const spot = await Spot.findByPk(req.params.id, {
+        include: {
+            model: User,
+            through: {
+                model: Booking
+            }
+        }
+    })
+    const body = req.body
+    if (!spot) {
+        res.statusCode = 404
+        return res.json({ 'message': 'Spot does not exist' })
+    }
+    if (spot.ownerId === userId) {
+        res.statusCode = 403
+        return res.json({ 'message': 'You cannot make a booking for a spot you own' })
+    }
+    console.log(spot.Users[0].Booking)
+    for (existingBooking of spot.Users) {
+        if (existingBooking.id === userId && existingBooking.Booking.startDate == body.startDate && exisitingBooking.Booking.endDate == body.endDate) {
+            res.statusCode = 403
+            return res.json({ 'message': 'You already have a booking for this spot on those dates' })
+        }
+    }
+    const user = await User.findByPk(userId)
+    console.log(body)
+    const booking = await spot.addUser(user, body)
+    console.log(booking)
+    try {
+        await booking.validate()
+        await booking.save()
+        res.json(booking)
+        // res.json()
+    } catch (e) {
+        res.statusCode = 400
+        res.json(e)
+    }
+})
+
 router.get('/:id/reviews', async (req, res) => {
     const spot = await Spot.findByPk(req.params.id)
     if (!spot) {
