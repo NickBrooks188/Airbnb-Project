@@ -27,7 +27,7 @@ const spots = [{
   state: 'NY',
   country: 'US',
   lat: 63.5,
-  lng: 104.7,
+  lng: 94.7,
   name: 'My second spot',
   description: 'my second favorite spot',
   price: 60.00

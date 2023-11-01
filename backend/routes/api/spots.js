@@ -381,19 +381,62 @@ router.post('/', requireAuth, async (req, res) => {
 router.get('/', async (req, res) => {
     const queries = req.query
     console.log(queries)
-    // let where = {}
-    // if (queries.minLat) {
-    //     where
-    // }
-    const spots = await Spot.findAll({
-        include: [{
-            model: Review,
-            attributes: ['stars'],
-        }, {
-            model: SpotImage,
-            attributes: ['url', 'preview']
-        }]
-    })
+    let filters = {}
+    try {
+        filters.latMin = parseFloat(queries.minLat) || -90
+        filters.latMax = parseFloat(queries.maxLat) || 90
+        filters.lngMin = parseFloat(queries.minLng) || -180
+        filters.lngMax = parseFloat(queries.maxLng) || 180
+        filters.priceMin = parseFloat(queries.minPrice) || 0
+        filters.priceMax = parseFloat(queries.maxPrice) || 1000000
+        filters.page = parseInt(queries.page) || 1
+        filters.size = parseInt(queries.size) || 20
+    } catch {
+        res.statusCode = 400
+        return res.json(e)
+    }
+    filters.page
+    console.log(filters)
+    if (filters.latMin < -90 || filters.latMax > 90 || filters.lngMin < -180 || filters.lngMax > 180 || filters.priceMin < 0 || filters.priceMax < 0) {
+        res.statusCode = 400
+        return res.json({ "message": "Invalid search filters provided" })
+    }
+    if (filters.page < 1 || filters.page > 10 || filters.size < 1 || filters.size > 20) {
+        res.statusCode = 400
+        return res.json({ "message": "Invalid page or size" })
+    }
+    const offset = (filters.page - 1) * filters.size
+    let spots
+    try {
+        spots = await Spot.findAll({
+            include: [{
+                model: Review,
+                attributes: ['stars'],
+            }, {
+                model: SpotImage,
+                attributes: ['url', 'preview']
+            }],
+            where: {
+                lat: {
+                    [Op.gte]: filters.latMin,
+                    [Op.lte]: filters.latMax
+                },
+                lng: {
+                    [Op.gte]: filters.lngMin,
+                    [Op.lte]: filters.lngMax
+                },
+                price: {
+                    [Op.gte]: filters.priceMin,
+                    [Op.lte]: filters.priceMax
+                }
+            },
+            limit: filters.size,
+            offset
+        })
+    } catch (e) {
+        res.statusCode = 400
+        return res.json(e)
+    }
 
     let result = []
     for (let spot of spots) {
@@ -413,7 +456,7 @@ router.get('/', async (req, res) => {
         delete spot.Reviews
         result.push(spot)
     }
-    res.json(result)
+    res.json({ "Spots": result, page: filters.page, size: filters.size })
 })
 
 module.exports = router;
