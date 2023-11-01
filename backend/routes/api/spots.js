@@ -67,14 +67,7 @@ router.post('/:id/reviews', requireAuth, async (req, res) => {
 router.post('/:id/bookings', requireAuth, async (req, res) => {
     const userId = req.user.id
 
-    const spot = await Spot.findByPk(req.params.id, {
-        include: {
-            model: User,
-            through: {
-                model: Booking
-            }
-        }
-    })
+    const spot = await Spot.findByPk(req.params.id)
     const body = req.body
     if (!spot) {
         res.statusCode = 404
@@ -84,22 +77,26 @@ router.post('/:id/bookings', requireAuth, async (req, res) => {
         res.statusCode = 403
         return res.json({ 'message': 'You cannot make a booking for a spot you own' })
     }
-    console.log(spot.Users[0].Booking)
-    for (existingBooking of spot.Users) {
-        if (existingBooking.id === userId && existingBooking.Booking.startDate == body.startDate && exisitingBooking.Booking.endDate == body.endDate) {
+    const bookings = await Booking.findAll({
+        where: {
+            spotId: spot.id
+        }
+    })
+    console.log(bookings)
+    let startTime = new Date(body.startDate).getTime()
+    let endTime = new Date(body.endDate).getTime()
+    for (existingBooking of bookings) {
+        if (existingBooking.userId === userId && existingBooking.startDate.getTime() == startTime && existingBooking.endDate.getTime() == endTime) {
             res.statusCode = 403
             return res.json({ 'message': 'You already have a booking for this spot on those dates' })
         }
     }
-    const user = await User.findByPk(userId)
+    body.userId = userId
+    body.spotId = spot.id
     console.log(body)
-    const booking = await spot.addUser(user, body)
-    console.log(booking)
     try {
-        await booking.validate()
-        await booking.save()
+        const booking = await Booking.create(body, { validate: true })
         res.json(booking)
-        // res.json()
     } catch (e) {
         res.statusCode = 400
         res.json(e)
@@ -115,7 +112,6 @@ router.get('/:id/reviews', async (req, res) => {
     const reviewtest = await Review.findAll({
         include: [ReviewImage]
     })
-    // console.log(reviews)
 
     // query for all reviews with specified attributes
     const reviews = await Review.findAll({
@@ -177,95 +173,66 @@ router.get('/:id/reviews', async (req, res) => {
         results.push(review)
     }
 
-
-
-    // console.log(reviews)
-    // const spot = await Spot.findByPk(req.params.id, {
-    //     attributes: [],
-    //     include: {
-    //         model: User,
-    //         attributes: ['id'],
-    //         through: {
-    //             model: Review,
-    //             attributes: ['id', 'userId', 'spotId', 'review', 'stars', 'createdAt', 'updatedAt'],
-    //             include: [{
-    //                 model: ReviewImage
-    //             }]
-    //         }
-    //     }
-    // })
-    // if (!spot) {
-    //     res.statusCode = 404
-    //     return res.json({ 'message': 'Spot does not exist' })
-    // }
-    // const reviews = await Review.findAll({
-    //     where: {
-    //         spotId: req.params.id
-    //     },
-    //     attributes: ['id', 'userId', 'spotId', 'review', 'stars', 'createdAt', 'updatedAt'],
-    //     include: [{
-    //         model: User,
-    //         attributes: ['id'],
-    //         where: {
-    //             id: 
-    //         }
-    //     }]
-    // })
-
-    // const reviews = await ReviewImage.findAll()
-
     return res.json(results)
 })
 
 router.get('/:id/bookings', requireAuth, async (req, res) => {
-    // check if user is logged in
-    // check if user is owner of spot
 
-    let bookingAttributes = ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt']
-    let userAttributes = ['id', 'firstName', 'lastName']
-    const bookings = await Spot.findByPk(req.params.id, {
-        attributes: ['ownerId'],
-        include: {
-            model: User,
-            attributes: userAttributes,
-            through: {
-                model: Booking,
-                attributes: bookingAttributes
-            }
-        }
-    })
-    if (!bookings) {
+    // find spot
+    const spot = await Spot.findByPk(req.params.id)
+    // confirm spot exists
+    if (!spot) {
         res.statusCode = 404
         return res.json({ 'message': 'Spot does not exist' })
     }
-
     let owner = false
-    if (req.user.id === bookings.ownerId) owner = true
+    if (req.user.id === spot.ownerId) owner = true
 
+    // find all bookings with spotId matching the spot's id, with more attributes if user is the owner
+    let bookingAttributes = []
+    if (owner) { bookingAttributes = ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt'] }
+    else { bookingAttributes = ['spotId', 'startDate', 'endDate'] }
+    const bookings = await Booking.findAll({
+        where: {
+            spotId: spot.id
+        },
+        attributes: bookingAttributes
+    })
 
-    let result = []
-    for (let booking of bookings.Users) {
-        booking = await booking.toJSON()
-        const temp = {}
-        const bookingDetails = booking.Booking
-        temp.spotId = bookingDetails.spotId
-        temp.startDate = bookingDetails.startDate
-        temp.endDate = bookingDetails.endDate
-        if (owner) {
-            temp.id = bookingDetails.id
-            temp.userId = bookingDetails.userId
-            temp.createdAt = bookingDetails.createdAt
-            temp.updatedAt = bookingDetails.updatedAt
-            temp.User = {}
-            temp.User.id = booking.id
-            temp.User.firstName = booking.firstName
-            temp.User.lastName = booking.lastName
-        }
-
-        result.push(temp)
+    let userIdArray = []
+    for (let booking of bookings) {
+        if (userIdArray.indexOf(booking.userId) === -1) userIdArray.push(booking.userId)
     }
+    // if spot owner, query for all owners whose ids appear in bookings
+    let users
+    if (owner) {
+        users = await User.findAll({
+            where: {
+                id: {
+                    [Op.in]: userIdArray
+                }
+            },
+            attributes: ['id', 'firstName', 'lastName']
+        })
+    }
+    console.log(users)
+    // if owner, add owner details to each booking where ownerId matches owner's id
+    let result = []
+    if (owner) {
+        for (let booking of bookings) {
+            booking = await booking.toJSON()
 
-    res.json(result)
+            for (let user of users) {
+                if (booking.userId === user.id) booking.User = user
+            }
+
+            result.push(booking)
+        }
+        return res.json(result)
+
+    }
+    res.json(bookings)
+    // res.json(result)
 })
 
 router.get('/current', requireAuth, async (req, res) => {
