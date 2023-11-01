@@ -53,8 +53,6 @@ router.get('/current', requireAuth, async (req, res) => {
         }, {
             model: User,
             attributes: ['id', 'firstName', 'lastName']
-        }, {
-            model: review
         }]
     })
     res.json(reviews)
