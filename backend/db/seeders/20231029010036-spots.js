@@ -43,7 +43,32 @@ const spots = [{
   name: 'My third spot',
   description: 'my third favorite spot',
   price: 35.50
-}]
+},
+{
+  ownerId: 2,
+  address: '777 test st',
+  city: 'San Diego',
+  state: 'California',
+  country: 'United States',
+  lat: 35.2,
+  lng: 34.7,
+  name: 'My only spot',
+  description: "It's in San Diego",
+  price: 85.50
+},
+{
+  ownerId: 3,
+  address: '777 lombard st',
+  city: 'San Francisco',
+  state: 'California',
+  country: 'United States',
+  lat: 37.2,
+  lng: 32.7,
+  name: 'App Academy',
+  description: "Coding bootcamp",
+  price: 75.50
+}
+]
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
@@ -70,7 +95,7 @@ module.exports = {
      */
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      name: { [Op.in]: ['My spot', 'My second spot', 'My third spot'] }
+      name: { [Op.in]: ['My spot', 'My second spot', 'My third spot', 'My only spot', 'App Academy'] }
     }, {});
   }
 };

@@ -69,6 +69,18 @@ const validateReviews = [
     handleValidationErrors
 ]
 
+const validateBookings = [
+    check('startDate')
+        .exists({ checkFalsy: true })
+        // .isDate()
+        .withMessage("Start date must be a provided date"),
+    check('endDate')
+        .exists({ checkFalsy: true })
+        // .isDate()
+        .withMessage("End date must be a provided date"),
+    handleValidationErrors
+]
+
 router.post('/:id/images', requireAuth, async (req, res) => {
     const ownerId = req.user.id
 
@@ -122,7 +134,7 @@ router.post('/:id/reviews', requireAuth, validateReviews, async (req, res) => {
     }
 })
 
-router.post('/:id/bookings', requireAuth, async (req, res, next) => {
+router.post('/:id/bookings', requireAuth, validateBookings, async (req, res, next) => {
     const userId = req.user.id
 
     const spot = await Spot.findByPk(req.params.id)
@@ -282,7 +294,6 @@ router.get('/current', requireAuth, async (req, res) => {
     let result = []
     for (let spot of spots) {
         spot = await spot.toJSON()
-        let temp = {}
         let imageURL
         for (let spotImage of spot.SpotImages) {
             if (spotImage.preview) imageURL = SpotImage.url
@@ -297,7 +308,7 @@ router.get('/current', requireAuth, async (req, res) => {
         delete spot.SpotImages
         spot.avgRating = reviewSum / reviewCount
         spot.previewImage = imageURL
-        result.push(temp)
+        result.push(spot)
     }
 
     res.json({ "Spots": result })
@@ -328,7 +339,16 @@ router.put('/:id', requireAuth, validateSpots, async (req, res) => {
 
     if (req.user.id === spot.ownerId) {
         let now = new Date()
-        spot = { ...update, createdAt: spot.createdAt, id: spot.id, updatedAt: now }
+        spot.address = update.address
+        spot.city = update.city
+        spot.state = update.state
+        spot.country = update.country
+        spot.lat = update.lat
+        spot.lng = update.lng
+        spot.name = update.name
+        spot.description = update.description
+        spot.price = update.price
+        spot.updatedAt = now
         try {
             await spot.validate()
             await spot.save()

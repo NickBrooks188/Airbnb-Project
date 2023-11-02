@@ -12,15 +12,12 @@ const router = express.Router();
 const validateBookings = [
     check('startDate')
         .exists({ checkFalsy: true })
-        .isDate()
+        // .isDate()
         .withMessage("Start date must be a provided date"),
     check('endDate')
         .exists({ checkFalsy: true })
-        .isDate()
+        // .isDate()
         .withMessage("End date must be a provided date"),
-    check('endDate')
-        .isDate({ min: req.body.startDate })
-        .withMessage("endDate cannot come before startDate"),
     handleValidationErrors
 ]
 
@@ -43,7 +40,7 @@ router.get('/current', requireAuth, async (req, res) => {
                 attributes: ['url', 'preview']
             }],
         attributes: {
-            exclude: ['description']
+            exclude: ['description', 'createdAt', 'updatedAt']
         },
         where: {
             id: spotIds
@@ -98,12 +95,19 @@ router.put('/:id', requireAuth, validateBookings, async (req, res, next) => {
         res.json({ "message": "Past bookings can't be modified" })
     }
 
-    booking.startDate = update.startDate || booking.startDate
-    booking.endDate = update.endDate || booking.endDate
+    booking.startDate = update.startDate
+    booking.endDate = update.endDate
     booking.updatedAt = now
 
     const startTime = booking.startDate.getTime()
     const endTime = booking.endDate.getTime()
+
+    if (startTime >= endTime) {
+        const err = new Error('Bad Request');
+        err.status = 400;
+        err.errors = { 'endDate': "endDate cannot be on or before startDate" };
+        return next(err);
+    }
 
     const bookings = await Booking.findAll({
         where: {

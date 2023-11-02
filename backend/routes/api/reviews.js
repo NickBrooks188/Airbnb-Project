@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Review, User, ReviewImage, Spot } = require('../../db/models');
+const { Review, User, ReviewImage, Spot, SpotImage } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -71,11 +71,29 @@ router.get('/current', requireAuth, async (req, res) => {
         }, {
             model: Spot,
             attributes: {
-                exclude: ['description']
+                exclude: ['description', 'createdAt', 'updatedAt']
+            },
+            include: {
+                model: SpotImage
             }
         }]
     })
-    res.json({ "Reviews": reviews })
+
+    let result = []
+    for (let review of reviews) {
+        review = await review.toJSON()
+        let previewImage
+        console.log(review.Spot.SpotImages)
+        for (let spotImage of review.Spot.SpotImages) {
+            if (spotImage.preview) {
+                review.Spot.previewImage = spotImage.url
+                break
+            }
+        }
+        delete review.Spot.SpotImages
+        result.push(review)
+    }
+    res.json({ "Reviews": result })
 })
 
 router.put('/:id', requireAuth, validateReviews, async (req, res) => {
