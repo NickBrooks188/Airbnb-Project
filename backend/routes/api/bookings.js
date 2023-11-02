@@ -26,7 +26,10 @@ router.get('/current', requireAuth, async (req, res) => {
             {
                 model: SpotImage,
                 attributes: ['url', 'preview']
-            }]
+            }],
+        attributes: {
+            exclude: ['description']
+        }
     })
 
     let spotArr = []
@@ -67,7 +70,7 @@ router.put('/:id', requireAuth, async (req, res, next) => {
 
     if (req.user.id !== booking.userId) {
         res.statusCode = 400
-        return res.json({ 'message': 'You are not the owner of this booking' })
+        return res.json({ 'message': 'Forbidden' })
     }
 
     const now = new Date()

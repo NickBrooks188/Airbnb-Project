@@ -11,6 +11,65 @@ const router = express.Router();
 
 const { Op } = require("sequelize");
 
+const validateSpots = [
+    check('address')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("Street address is required"),
+    check('city')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("City is required"),
+    check('state')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("State is required"),
+    check('country')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("Country is required"),
+    check('lat')
+        .exists({ checkFalsy: true })
+        .isFloat({ min: -90, max: 90 })
+        .withMessage("Latitude is not valid"),
+    check('lng')
+        .exists({ checkFalsy: true })
+        .isFloat({ min: -180, max: 180 })
+        .withMessage("Longitude is not valid"),
+    check('name')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("Name is required"),
+    check('name')
+        .isLength({ max: 50 })
+        .withMessage("Name must be less than 50 character"),
+    check('description')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("Description is required"),
+    check('price')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("Price per day is required"),
+    handleValidationErrors
+]
+
+const validateReviews = [
+    check('review')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("Review text is required"),
+    check('stars')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("Stars is required"),
+    check('stars')
+        .exists({ checkFalsy: true })
+        .isInt({ min: 1, max: 5 })
+        .withMessage("Stars must be an integer from 1 to 5"),
+    handleValidationErrors
+]
+
 router.post('/:id/images', requireAuth, async (req, res) => {
     const ownerId = req.user.id
 
@@ -37,7 +96,7 @@ router.post('/:id/images', requireAuth, async (req, res) => {
     }
 })
 
-router.post('/:id/reviews', requireAuth, async (req, res) => {
+router.post('/:id/reviews', requireAuth, validateReviews, async (req, res) => {
     const userId = req.user.id
 
     const spot = await Spot.findByPk(req.params.id, {
@@ -313,7 +372,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
     }
 })
 
-router.put('/:id', requireAuth, async (req, res) => {
+router.put('/:id', requireAuth, validateSpots, async (req, res) => {
     let spot = await Spot.findByPk(req.params.id)
     if (!spot) {
         res.statusCode = 404
@@ -381,7 +440,7 @@ router.get('/:id', async (req, res) => {
 })
 
 
-router.post('/', requireAuth, async (req, res) => {
+router.post('/', requireAuth, validateSpots, async (req, res) => {
     const body = req.body
     body.ownerId = req.user.id
     const spot = await Spot.build(body)

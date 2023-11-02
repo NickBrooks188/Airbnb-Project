@@ -9,6 +9,22 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
+const validateReviews = [
+    check('review')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("Review text is required"),
+    check('stars')
+        .exists({ checkFalsy: true })
+        .notEmpty()
+        .withMessage("Stars is required"),
+    check('stars')
+        .exists({ checkFalsy: true })
+        .isInt({ min: 1, max: 5 })
+        .withMessage("Stars must be an integer from 1 to 5"),
+    handleValidationErrors
+]
+
 router.post('/:id/images', requireAuth, async (req, res) => {
     const userId = req.user.id
 
@@ -54,13 +70,16 @@ router.get('/current', requireAuth, async (req, res) => {
             model: User,
             attributes: ['id', 'firstName', 'lastName']
         }, {
-            model: Spot
+            model: Spot,
+            attributes: {
+                exclude: ['description']
+            }
         }]
     })
     res.json({ "Reviews": reviews })
 })
 
-router.put('/:id', requireAuth, async (req, res) => {
+router.put('/:id', requireAuth, validateReviews, async (req, res) => {
     let review = await Review.findByPk(req.params.id)
     if (!review) {
         res.statusCode = 404
@@ -68,24 +87,22 @@ router.put('/:id', requireAuth, async (req, res) => {
     }
     const update = req.body
 
-    if (req.user.id === review.userId) {
-        let now = new Date()
-        review.userId = update.userId || review.userId
-        review.spotId = update.spotId || review.spotId
-        review.review = update.review || review.review
-        review.stars = update.stars || review.stars
-        review.updatedAt = now
-        try {
-            await review.validate()
-            await review.save()
-            res.json(review)
-        } catch (e) {
-            res.statusCode = 400
-            res.json(e)
-        }
-    } else {
+    if (req.user.id !== review.userId) {
         res.statusCode = 403
         return res.json({ 'message': "Forbidden" })
+    }
+
+    let now = new Date()
+    review.review = update.review || review.review
+    review.stars = update.stars || review.stars
+    review.updatedAt = now
+    try {
+        await review.validate()
+        await review.save()
+        res.json(review)
+    } catch (e) {
+        res.statusCode = 400
+        res.json(e)
     }
 })
 

@@ -55,15 +55,34 @@ module.exports = (sequelize, DataTypes) => {
     },
     lat: {
       type: DataTypes.DECIMAL,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        properRange(value) {
+          if (value < -90 || value > 90) {
+            throw new Error('Latitude is not valid')
+          }
+        }
+      }
     },
     lng: {
       type: DataTypes.DECIMAL,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        properRange(value) {
+          if (value < -180 || value > 180) {
+            throw new Error('Longitude is not valid')
+          }
+        }
+      }
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notLongerThan50(value) {
+          if (value.length > 50) throw new Error('Name must be less than 50 characters')
+        }
+      }
     },
     description: {
       type: DataTypes.STRING,
