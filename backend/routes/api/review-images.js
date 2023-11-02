@@ -19,15 +19,15 @@ router.delete('/:id', requireAuth, async (req, res) => {
     })
     if (!reviewImage) {
         res.statusCode = 404
-        return res.json({ "message": "Review image does not exist" })
+        return res.json({ "message": "Review Image couldn't be found" })
     }
     if (reviewImage.Review.userId === userId) {
         // delete the image and send a message
         await reviewImage.destroy()
-        res.json({ 'message': "Successfully deleted review image" })
+        res.json({ 'message': "Successfully deleted" })
     } else {
-        res.statusCode = 400
-        res.json({ "message": "You do not own this image" })
+        res.statusCode = 403
+        res.json({ "message": "Forbidden" })
     }
 })
 

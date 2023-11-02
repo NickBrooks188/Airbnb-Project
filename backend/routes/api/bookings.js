@@ -11,71 +11,120 @@ const router = express.Router();
 
 router.get('/current', requireAuth, async (req, res) => {
     const userId = req.user.id
-    const bookings = await Spot.findAll({
-        include: [{
-            model: User,
-            where: {
-                id: userId
-            },
-            attributes: ['id'],
-            through: {
-                model: Booking,
-                attributes: ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt']
-            },
-        },
-        {
-            model: SpotImage,
-            attributes: ['url'],
-            where: {
-                preview: true
-            }
-        }]
+
+    const bookings = await Booking.findAll({
+        where: {
+            userId
+        }
     })
+    let spotIds = []
+    for (let booking of bookings) {
+        if (spotIds.indexOf(booking.spotId) == -1) spotIds.push(booking.spotId)
+    }
+    const spots = await Spot.findAll({
+        include: [
+            {
+                model: SpotImage,
+                attributes: ['url', 'preview']
+            }]
+    })
+
+    let spotArr = []
+    for (let spot of spots) {
+        spot = await spot.toJSON()
+        for (let image of spot.SpotImages) {
+            if (image.preview) {
+                spot.previewImage = image.url
+                break
+            }
+        }
+        delete spot.SpotImages
+        spotArr.push(spot)
+    }
 
     let result = []
     for (let booking of bookings) {
         booking = await booking.toJSON()
-        let temp = {}
-        temp = booking.Users[0].Booking
-        temp.Spot = {}
-        let imageURL
-        if (booking.SpotImages[0]) imageURL = booking.SpotImages[0].url
-        delete booking.Users
-        delete booking.SpotImages
-        temp.Spot = booking
-        if (imageURL) temp.Spot.previewImage = imageURL
-        result.push(temp)
+        for (let spot of spotArr) {
+            if (booking.spotId === spot.id) {
+                booking.Spot = spot
+                break
+            }
+        }
+        result.push(booking)
     }
 
-    res.json(result)
+    res.json({ "Bookings": result })
 })
 
-router.put('/:id', requireAuth, async (req, res) => {
+router.put('/:id', requireAuth, async (req, res, next) => {
     let booking = await Booking.findByPk(req.params.id)
     if (!booking) {
         res.statusCode = 404
-        return res.json({ 'message': 'Booking does not exist' })
+        return res.json({ 'message': "Booking couldn't be found" })
     }
     const update = req.body
 
-    if (req.user.id === booking.userId) {
-        let now = new Date()
-        booking.userId = update.userId || booking.userId
-        booking.spotId = update.spotId || booking.spotId
-        booking.startDate = update.startDate || booking.startDate
-        booking.endDate = update.endDate || booking.endDate
-        booking.updatedAt = now
-        try {
-            await booking.validate()
-            await booking.save()
-            res.json(booking)
-        } catch (e) {
-            res.statusCode = 400
-            res.json(e)
-        }
-    } else {
+    if (req.user.id !== booking.userId) {
         res.statusCode = 400
         return res.json({ 'message': 'You are not the owner of this booking' })
+    }
+
+    const now = new Date()
+
+    if (booking.startDate < now) {
+        res.statusCode = 403
+        res.json({ "message": "Past bookings can't be modified" })
+    }
+
+    booking.startDate = update.startDate || booking.startDate
+    booking.endDate = update.endDate || booking.endDate
+    booking.updatedAt = now
+
+    const startTime = booking.startDate.getTime()
+    const endTime = booking.endDate.getTime()
+    if (startTime >= endTime) {
+        const err = new Error('Bad Request');
+        err.status = 400;
+        err.errors = { 'endDate': "endDate cannot be on or before startDate" };
+        return next(err);
+    }
+
+    const bookings = await Booking.findAll({
+        where: {
+            spotId: booking.spotId
+        }
+    })
+    const errors = {}
+    for (const existingBooking of bookings) {
+        const existingStart = existingBooking.startDate.getTime()
+        const existingEnd = existingBooking.endDate.getTime()
+
+        if (startTime >= existingStart && startTime <= existingEnd) {
+            errors.startDate = "Start date conflicts with an existing booking"
+        }
+        if (endTime >= existingStart && endTime <= existingEnd) {
+            errors.endDate = "End date conflicts with an existing booking"
+        }
+        if (startTime <= existingStart && endTime >= existingEnd) {
+            errors.startDate = "Start date conflicts with an existing booking"
+            errors.endDate = "End date conflicts with an existing booking"
+        }
+    }
+    if (errors.startDate || errors.endDate) {
+        const err = new Error("Sorry, this spot is already booked for the specified dates")
+        err.status = 403
+        err.errors = errors
+        return next(err)
+    }
+
+    try {
+        await booking.validate()
+        await booking.save()
+        res.json(booking)
+    } catch (e) {
+        res.statusCode = 400
+        res.json(e)
     }
 })
 
@@ -85,19 +134,23 @@ router.delete('/:id', requireAuth, async (req, res) => {
     })
     if (!booking) {
         res.statusCode = 404
-        return res.json({ "message": "Booking does not exist" })
+        return res.json({ "message": "Booking couldn't be found" })
     }
+
+
     const spot = await Spot.findByPk(booking.spotId)
-    bookingStart = booking.startDate.getTime()
-    const now = Date.now()
+    let bookingStart = booking.startDate.getTime()
+
+    const now = new Date()
 
     if (bookingStart < now) {
-        res.statusCode = 400
-        res.json({ "message": "Booking startDate has already passed" })
+        res.statusCode = 403
+        res.json({ "message": "Bookings that have been started can't be deleted" })
     }
+
     else if (booking.userId === userId || spot.ownerId === userId) {
         await booking.destroy()
-        res.json({ 'message': "Successfully deleted booking" })
+        res.json({ 'message': "Successfully deleted" })
     } else {
         res.statusCode = 400
         res.json({ "message": "You do not own this booking" })

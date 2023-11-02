@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
-const { Review, User, ReviewImage, review } = require('../../db/models');
+const { Review, User, ReviewImage, Spot } = require('../../db/models');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
@@ -17,15 +17,15 @@ router.post('/:id/images', requireAuth, async (req, res) => {
     })
     if (!review) {
         res.statusCode = 404
-        return res.json({ 'message': 'Review does not exist' })
+        return res.json({ 'message': "Review couldn't be found" })
     }
     if (review.ReviewImages.length > 9) {
         res.statusCode = 403
-        return res.json({ 'message': 'This review already has the maximum number of images' })
+        return res.json({ 'message': "Maximum number of images for this resource was reached" })
     }
     if (review.userId !== userId) {
         res.statusCode = 403
-        return res.json({ 'message': 'You do not own this review' })
+        return res.json({ 'message': 'Forbidden' })
     }
     const body = req.body
     try {
@@ -53,9 +53,11 @@ router.get('/current', requireAuth, async (req, res) => {
         }, {
             model: User,
             attributes: ['id', 'firstName', 'lastName']
+        }, {
+            model: Spot
         }]
     })
-    res.json(reviews)
+    res.json({ "Reviews": reviews })
 })
 
 router.put('/:id', requireAuth, async (req, res) => {
@@ -82,8 +84,8 @@ router.put('/:id', requireAuth, async (req, res) => {
             res.json(e)
         }
     } else {
-        res.statusCode = 400
-        return res.json({ 'message': 'You are not the owner of this review' })
+        res.statusCode = 403
+        return res.json({ 'message': "Forbidden" })
     }
 })
 
@@ -93,14 +95,14 @@ router.delete('/:id', requireAuth, async (req, res) => {
     })
     if (!review) {
         res.statusCode = 404
-        return res.json({ "message": "Review does not exist" })
+        return res.json({ "message": "Review couldn't be found" })
     }
     if (review.userId === userId) {
         await review.destroy()
-        res.json({ 'message': "Successfully deleted review" })
+        res.json({ 'message': "Successfully deleted" })
     } else {
-        res.statusCode = 400
-        res.json({ "message": "You do not own this review" })
+        res.statusCode = 403
+        res.json({ "message": "Forbidden" })
     }
 })
 
