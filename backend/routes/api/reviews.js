@@ -19,7 +19,6 @@ const validateReviews = [
         .notEmpty()
         .withMessage("Stars is required"),
     check('stars')
-        .exists({ checkFalsy: true })
         .isInt({ min: 1, max: 5 })
         .withMessage("Stars must be an integer from 1 to 5"),
     handleValidationErrors
@@ -45,11 +44,11 @@ router.post('/:id/images', requireAuth, async (req, res) => {
     }
     const body = req.body
     try {
-        const reviewImage = await review.createReviewImage(body)
-        const returnData = {}
-        returnData.id = reviewImage.id
-        returnData.url = reviewImage.url
-        res.json(returnData)
+        const reviewImage = await review.createReviewImage(body, { validate: true })
+        const result = {}
+        result.id = reviewImage.id
+        result.url = reviewImage.url
+        res.json(result)
     } catch (e) {
         res.statusCode = 400
         res.json(e)
@@ -93,8 +92,8 @@ router.put('/:id', requireAuth, validateReviews, async (req, res) => {
     }
 
     let now = new Date()
-    review.review = update.review || review.review
-    review.stars = update.stars || review.stars
+    review.review = update.review
+    review.stars = update.stars
     review.updatedAt = now
     try {
         await review.validate()
@@ -116,7 +115,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
     }
     if (review.userId === userId) {
         await review.destroy()
-        res.json({ 'message': "Successfully deleted" })
+        res.json({ "message": "Successfully deleted" })
     } else {
         res.statusCode = 403
         res.json({ "message": "Forbidden" })

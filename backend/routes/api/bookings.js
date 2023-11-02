@@ -9,6 +9,21 @@ const { handleValidationErrors } = require('../../utils/validation');
 
 const router = express.Router();
 
+const validateBookings = [
+    check('startDate')
+        .exists({ checkFalsy: true })
+        .isDate()
+        .withMessage("Start date must be a provided date"),
+    check('endDate')
+        .exists({ checkFalsy: true })
+        .isDate()
+        .withMessage("End date must be a provided date"),
+    check('endDate')
+        .isDate({ min: req.body.startDate })
+        .withMessage("endDate cannot come before startDate"),
+    handleValidationErrors
+]
+
 router.get('/current', requireAuth, async (req, res) => {
     const userId = req.user.id
 
@@ -19,7 +34,7 @@ router.get('/current', requireAuth, async (req, res) => {
     })
     let spotIds = []
     for (let booking of bookings) {
-        if (spotIds.indexOf(booking.spotId) == -1) spotIds.push(booking.spotId)
+        if (spotIds.indexOf(booking.spotId) === -1) spotIds.push(booking.spotId)
     }
     const spots = await Spot.findAll({
         include: [
@@ -29,6 +44,9 @@ router.get('/current', requireAuth, async (req, res) => {
             }],
         attributes: {
             exclude: ['description']
+        },
+        where: {
+            id: spotIds
         }
     })
 
@@ -60,7 +78,7 @@ router.get('/current', requireAuth, async (req, res) => {
     res.json({ "Bookings": result })
 })
 
-router.put('/:id', requireAuth, async (req, res, next) => {
+router.put('/:id', requireAuth, validateBookings, async (req, res, next) => {
     let booking = await Booking.findByPk(req.params.id)
     if (!booking) {
         res.statusCode = 404
@@ -69,7 +87,7 @@ router.put('/:id', requireAuth, async (req, res, next) => {
     const update = req.body
 
     if (req.user.id !== booking.userId) {
-        res.statusCode = 400
+        res.statusCode = 403
         return res.json({ 'message': 'Forbidden' })
     }
 
@@ -86,12 +104,6 @@ router.put('/:id', requireAuth, async (req, res, next) => {
 
     const startTime = booking.startDate.getTime()
     const endTime = booking.endDate.getTime()
-    if (startTime >= endTime) {
-        const err = new Error('Bad Request');
-        err.status = 400;
-        err.errors = { 'endDate': "endDate cannot be on or before startDate" };
-        return next(err);
-    }
 
     const bookings = await Booking.findAll({
         where: {
@@ -148,15 +160,15 @@ router.delete('/:id', requireAuth, async (req, res) => {
 
     if (bookingStart < now) {
         res.statusCode = 403
-        res.json({ "message": "Bookings that have been started can't be deleted" })
+        return res.json({ "message": "Bookings that have been started can't be deleted" })
     }
 
-    else if (booking.userId === userId || spot.ownerId === userId) {
+    if (booking.userId === userId || spot.ownerId === userId) {
         await booking.destroy()
         res.json({ 'message': "Successfully deleted" })
     } else {
-        res.statusCode = 400
-        res.json({ "message": "You do not own this booking" })
+        res.statusCode = 403
+        res.json({ "message": "Forbidden" })
     }
     res.json()
 })

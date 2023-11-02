@@ -42,7 +42,7 @@ const validateSpots = [
         .withMessage("Name is required"),
     check('name')
         .isLength({ max: 50 })
-        .withMessage("Name must be less than 50 character"),
+        .withMessage("Name must be less than 50 characters"),
     check('description')
         .exists({ checkFalsy: true })
         .notEmpty()
@@ -64,7 +64,6 @@ const validateReviews = [
         .notEmpty()
         .withMessage("Stars is required"),
     check('stars')
-        .exists({ checkFalsy: true })
         .isInt({ min: 1, max: 5 })
         .withMessage("Stars must be an integer from 1 to 5"),
     handleValidationErrors
@@ -189,71 +188,23 @@ router.get('/:id/reviews', async (req, res) => {
         res.statusCode = 404
         return res.json({ 'message': "Spot couldn't be found" })
     }
-    const reviewtest = await Review.findAll({
-        include: [ReviewImage]
-    })
 
-    // query for all reviews with specified attributes
+    // query for all reviews with specified attributes + User + ReviewImages
     const reviews = await Review.findAll({
         where: {
             spotId: req.params.id
         },
-        attributes: ['id', 'spotId', 'userId', 'review', 'stars', 'createdAt', 'updatedAt']
+        attributes: ['id', 'spotId', 'userId', 'review', 'stars', 'createdAt', 'updatedAt'],
+        include: [{
+            model: User,
+            attributes: ['id', 'firstName', 'lastName']
+        }, {
+            model: ReviewImage,
+            attributes: ['id', 'url']
+        }]
     })
 
-    // build an array of all userIds in the reviews, then an array for all reviewIds
-    let userIds = []
-    let reviewIds = []
-
-    for (let review of reviews) {
-        userIds.push(review.userId)
-        reviewIds.push(review.id)
-    }
-
-    // query for all users with ids in the first array, limiting attributes to id, firstName, lastName
-    const users = await User.findAll({
-        where: {
-            id: {
-                [Op.in]: userIds
-            }
-        },
-        attributes: ['id', 'firstName', 'lastName']
-    })
-    // query for all images with reviewId in the array, limiting attributes to id and url
-    const images = await ReviewImage.findAll({
-        where: {
-            reviewId: {
-                [Op.in]: reviewIds
-            }
-        },
-        attributes: ['id', 'url', 'reviewId']
-    })
-    let results = []
-    // iterate through reviews, tacking on appropriate user and images
-    for (let review of reviews) {
-        review = await review.toJSON()
-        for (let user of users) {
-            if (user.id == review.userId) {
-                review.User = {}
-                review.User.id = user.id
-                review.User.firstName = user.firstName
-                review.User.lastName = user.lastName
-                break
-            }
-        }
-        review.ReviewImages = []
-        for (let image of images) {
-            if (image.reviewId === review.id) {
-                const temp = {}
-                temp.id = image.id
-                temp.url = image.url
-                review.ReviewImages.push(temp)
-            }
-        }
-        results.push(review)
-    }
-
-    return res.json({ "Reviews": results })
+    return res.json({ "Reviews": reviews })
 })
 
 router.get('/:id/bookings', requireAuth, async (req, res) => {
@@ -320,16 +271,12 @@ router.get('/current', requireAuth, async (req, res) => {
             ownerId: userId
         },
         include: [{
-            model: User,
-            attributes: ['id'],
-            through: {
-                model: Review,
-                attributes: ['stars']
-            }
+            model: Review,
+            attributes: ['stars']
         },
         {
             model: SpotImage,
-            attributes: ['url', 'preview'],
+            attributes: ['url', 'preview']
         }]
     })
     let result = []
@@ -341,16 +288,15 @@ router.get('/current', requireAuth, async (req, res) => {
             if (spotImage.preview) imageURL = SpotImage.url
             break
         }
-        let reviewCount = spot.Users.length
+        let reviewCount = spot.Reviews.length
         let reviewSum = 0
-        for (let review of spot.Users) {
-            reviewSum += review.Booking.stars
+        for (let review of spot.Reviews) {
+            reviewSum += review.stars
         }
-        delete spot.Users
+        delete spot.Reviews
         delete spot.SpotImages
-        temp = spot
-        temp.avgRating = reviewSum / reviewCount
-        temp.previewImage = imageURL
+        spot.avgRating = reviewSum / reviewCount
+        spot.previewImage = imageURL
         result.push(temp)
     }
 
@@ -382,17 +328,7 @@ router.put('/:id', requireAuth, validateSpots, async (req, res) => {
 
     if (req.user.id === spot.ownerId) {
         let now = new Date()
-        spot.ownerId = update.ownerId || spot.ownerId
-        spot.address = update.address || spot.address
-        spot.city = update.city || spot.city
-        spot.state = update.state || spot.state
-        spot.country = update.country || spot.country
-        spot.lat = update.lat || spot.lat
-        spot.lng = update.lng || spot.lng
-        spot.name = update.name || spot.name
-        spot.description = update.description || spot.description
-        spot.price = update.price || spot.price
-        spot.updatedAt = now
+        spot = { ...update, createdAt: spot.createdAt, id: spot.id, updatedAt: now }
         try {
             await spot.validate()
             await spot.save()
@@ -402,7 +338,7 @@ router.put('/:id', requireAuth, validateSpots, async (req, res) => {
             res.json(e)
         }
     } else {
-        res.statusCode = 400
+        res.statusCode = 403
         return res.json({ 'message': 'Forbidden' })
     }
 })
