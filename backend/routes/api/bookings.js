@@ -99,8 +99,8 @@ router.put('/:id', requireAuth, validateBookings, async (req, res, next) => {
     booking.endDate = update.endDate
     booking.updatedAt = now
 
-    const startTime = booking.startDate.getTime()
-    const endTime = booking.endDate.getTime()
+    const startTime = new Date(booking.startDate).getTime()
+    const endTime = new Date(booking.endDate).getTime()
 
     if (startTime >= endTime) {
         const err = new Error('Bad Request');
@@ -116,8 +116,8 @@ router.put('/:id', requireAuth, validateBookings, async (req, res, next) => {
     })
     const errors = {}
     for (const existingBooking of bookings) {
-        const existingStart = existingBooking.startDate.getTime()
-        const existingEnd = existingBooking.endDate.getTime()
+        const existingStart = new Date(existingBooking.startDate).getTime()
+        const existingEnd = new Date(existingBooking.endDate).getTime()
 
         if (startTime >= existingStart && startTime <= existingEnd) {
             errors.startDate = "Start date conflicts with an existing booking"
@@ -158,9 +158,9 @@ router.delete('/:id', requireAuth, async (req, res) => {
 
 
     const spot = await Spot.findByPk(booking.spotId)
-    let bookingStart = booking.startDate.getTime()
+    let bookingStart = new Date(booking.startDate).getTime()
 
-    const now = new Date()
+    const now = new Date().getTime()
 
     if (bookingStart < now) {
         res.statusCode = 403

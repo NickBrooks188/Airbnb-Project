@@ -100,7 +100,7 @@ router.put('/:id', requireAuth, validateReviews, async (req, res) => {
     let review = await Review.findByPk(req.params.id)
     if (!review) {
         res.statusCode = 404
-        return res.json({ 'message': 'Review does not exist' })
+        return res.json({ 'message': "Review couldn't be found" })
     }
     const update = req.body
 

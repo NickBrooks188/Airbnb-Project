@@ -51,6 +51,9 @@ const validateSpots = [
         .exists({ checkFalsy: true })
         .notEmpty()
         .withMessage("Price per day is required"),
+    check('price')
+        .isFloat({ min: 0 })
+        .withMessage("Price must be greater than or equal to 0"),
     handleValidationErrors
 ]
 
@@ -163,8 +166,8 @@ router.post('/:id/bookings', requireAuth, validateBookings, async (req, res, nex
     }
     const errors = {}
     for (const existingBooking of bookings) {
-        const existingStart = existingBooking.startDate.getTime()
-        const existingEnd = existingBooking.endDate.getTime()
+        const existingStart = new Date(existingBooking.startDate).getTime()
+        const existingEnd = new Date(existingBooking.endDate).getTime()
 
         if (startTime >= existingStart && startTime <= existingEnd) {
             errors.startDate = "Start date conflicts with an existing booking"
@@ -233,15 +236,17 @@ router.get('/:id/bookings', requireAuth, async (req, res) => {
 
     // find all bookings with spotId matching the spot's id, with more attributes if user is the owner
     let bookingAttributes = []
-    if (owner) { bookingAttributes = ['id', 'spotId', 'userId', 'startDate', 'endDate', 'createdAt', 'updatedAt'] }
-    else { bookingAttributes = ['spotId', 'startDate', 'endDate'] }
+    if (!owner) { bookingAttributes = ['id', 'userId', 'createdAt', 'updatedAt'] }
+    console.log(bookingAttributes)
     const bookings = await Booking.findAll({
         where: {
             spotId: spot.id
         },
-        attributes: bookingAttributes
+        attributes: {
+            exclude: bookingAttributes
+        }
     })
-
+    console.log(bookings)
     let userIdArray = []
     for (let booking of bookings) {
         if (userIdArray.indexOf(booking.userId) === -1) userIdArray.push(booking.userId)
@@ -296,7 +301,7 @@ router.get('/current', requireAuth, async (req, res) => {
         spot = await spot.toJSON()
         let imageURL
         for (let spotImage of spot.SpotImages) {
-            if (spotImage.preview) imageURL = SpotImage.url
+            if (spotImage.preview) imageURL = spotImage.url
             break
         }
         let reviewCount = spot.Reviews.length
