@@ -31,6 +31,18 @@ const reviews = [{
   userId: 5,
   review: 'Cool!',
   stars: 4
+},
+{
+  spotId: 1,
+  userId: 3,
+  review: 'Had a great time!',
+  stars: 5
+},
+{
+  spotId: 3,
+  userId: 3,
+  review: 'I really enjoyed my booking at this spot, but it was too loud',
+  stars: 4
 }]
 
 
