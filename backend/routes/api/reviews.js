@@ -34,13 +34,13 @@ router.post('/:id/images', requireAuth, async (req, res) => {
         res.statusCode = 404
         return res.json({ 'message': "Review couldn't be found" })
     }
-    if (review.ReviewImages.length > 9) {
-        res.statusCode = 403
-        return res.json({ 'message': "Maximum number of images for this resource was reached" })
-    }
     if (review.userId !== userId) {
         res.statusCode = 403
         return res.json({ 'message': 'Forbidden' })
+    }
+    if (review.ReviewImages.length > 9) {
+        res.statusCode = 403
+        return res.json({ 'message': "Maximum number of images for this resource was reached" })
     }
     const body = req.body
     try {

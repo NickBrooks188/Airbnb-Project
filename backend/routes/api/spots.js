@@ -175,7 +175,7 @@ router.post('/:id/bookings', requireAuth, validateBookings, async (req, res, nex
         if (endTime >= existingStart && endTime <= existingEnd) {
             errors.endDate = "End date conflicts with an existing booking"
         }
-        if (startTime <= existingStart && endTime >= existingEnd) {
+        if (startTime < existingStart && endTime > existingEnd) {
             errors.startDate = "Start date conflicts with an existing booking"
             errors.endDate = "End date conflicts with an existing booking"
         }
