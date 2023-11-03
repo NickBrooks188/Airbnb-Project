@@ -10,7 +10,7 @@ const { Booking } = require('../models')
 
 const bookings = [{
   spotId: 1,
-  userId: 1,
+  userId: 2,
   startDate: '2020-01-01',
   endDate: '2020-01-05'
 },
