@@ -111,12 +111,14 @@ router.put('/:id', requireAuth, validateBookings, async (req, res, next) => {
 
     const bookings = await Booking.findAll({
         where: {
-            spotId: booking.spotId
+            spotId: booking.spotId,
+            id: {
+                [Op.notIn]: [booking.id]
+            }
         }
     })
     const errors = {}
     for (const existingBooking of bookings) {
-        if (existingBooking.id === req.params.id) continue
         const existingStart = new Date(existingBooking.startDate).getTime()
         const existingEnd = new Date(existingBooking.endDate).getTime()
 
