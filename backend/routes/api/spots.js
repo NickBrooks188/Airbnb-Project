@@ -311,7 +311,7 @@ router.get('/current', requireAuth, async (req, res) => {
         }
         delete spot.Reviews
         delete spot.SpotImages
-        spot.avgRating = reviewSum / reviewCount
+        spot.avgRating = (reviewSum / reviewCount) || 'N/A'
         spot.previewImage = imageURL
         result.push(spot)
     }
@@ -394,7 +394,7 @@ router.get('/:id', async (req, res) => {
     for (let review of spot.Reviews) {
         ratingSum += review.stars
     }
-    spot.avgRating = (ratingSum / ratingCount)
+    spot.avgRating = (ratingSum / ratingCount) || "N/A"
     delete spot.Reviews
 
     res.json(spot)
@@ -497,7 +497,7 @@ router.get('/', async (req, res, next) => {
         for (let review of spot.Reviews) {
             ratingSum += review.stars
         }
-        spot.avgRating = (ratingSum / ratingCount)
+        spot.avgRating = (ratingSum / ratingCount) || 'N/A'
         delete spot.SpotImages
         delete spot.Reviews
         result.push(spot)
