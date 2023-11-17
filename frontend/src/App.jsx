@@ -1,12 +1,13 @@
 import { createBrowserRouter, RouterProvider, createRoutesFromElements, Route, Outlet } from 'react-router-dom';
-import LoginFormPage from './components/LoginFormPage/LoginFormPage.jsx'
-import { useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
-import * as sessionActions from './store/session';
+import { useDispatch } from 'react-redux'
+import { useState, useEffect } from 'react'
+import * as sessionActions from './store/session'
+import Navigation from './components/Navigation/Navigation';
+
 
 function Layout() {
-  const dispatch = useDispatch();
-  const [isLoaded, setIsLoaded] = useState(false);
+  const dispatch = useDispatch()
+  const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     const dispatchLoaded = async () => {
@@ -18,6 +19,7 @@ function Layout() {
 
   return (
     <>
+      <Navigation isLoaded={isLoaded} />
       {isLoaded && <Outlet />}
     </>
   );
@@ -26,7 +28,6 @@ function Layout() {
 const router = createBrowserRouter(createRoutesFromElements(
   <Route element={<Layout />}>
     <Route path='/' element={<h1> Hello from App </h1>} />
-    <Route path='/login' element={<LoginFormPage />} />
   </Route>
 ))
 
