@@ -1,21 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import App from './App';
-import './index.css';
-import configureStore from './store';
-import { restoreCSRF, csrfFetch } from './store/csrf.js';
-import * as sessionActions from './store/session';
-import { ModalProvider, Modal } from './context/Modal';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
+import App from './App'
+import './index.css'
+import configureStore from './store'
+import { restoreCSRF, csrfFetch } from './store/csrf.js'
+import * as sessionActions from './store/session'
+import { ModalProvider, Modal } from './context/Modal'
 
-
-const store = configureStore();
+const store = configureStore()
 if (import.meta.env.MODE !== 'production') {
-  restoreCSRF();
+  restoreCSRF()
 
-  window.csrfFetch = csrfFetch;
-  window.store = store;
-  window.sessionActions = sessionActions;
+  window.csrfFetch = csrfFetch
+  window.store = store
+  window.sessionActions = sessionActions
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -27,4 +26,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       </Provider>
     </ModalProvider>
   </React.StrictMode>
-);
+)

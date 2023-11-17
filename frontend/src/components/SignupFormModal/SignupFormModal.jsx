@@ -1,25 +1,25 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import * as sessionActions from '../../store/session';
-import { useModal } from '../../context/Modal';
-import './SignupForm.css';
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import * as sessionActions from '../../store/session'
+import { useModal } from '../../context/Modal'
+import './SignupForm.css'
 
 const SignupFormModal = () => {
-    const dispatch = useDispatch();
-    const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [errors, setErrors] = useState({});
-    const { closeModal } = useModal();
+    const dispatch = useDispatch()
+    const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("")
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const [errors, setErrors] = useState({})
+    const { closeModal } = useModal()
 
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
         if (password === confirmPassword) {
-            setErrors({});
+            setErrors({})
             return dispatch(
                 sessionActions.signup({
                     email,
@@ -31,16 +31,16 @@ const SignupFormModal = () => {
             )
                 .then(closeModal)
                 .catch(async (res) => {
-                    const data = await res.json();
+                    const data = await res.json()
                     if (data?.errors) {
-                        setErrors(data.errors);
+                        setErrors(data.errors)
                     }
-                });
+                })
         }
         return setErrors({
             confirmPassword: "Confirm Password field must be the same as the Password field"
-        });
-    };
+        })
+    }
 
     return (
         <>
@@ -109,7 +109,7 @@ const SignupFormModal = () => {
                 <button type="submit">Sign Up</button>
             </form>
         </>
-    );
+    )
 }
 
-export default SignupFormModal;
+export default SignupFormModal
