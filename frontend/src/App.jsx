@@ -3,7 +3,10 @@ import { useDispatch } from 'react-redux'
 import { useState, useEffect } from 'react'
 import * as sessionActions from './store/session'
 import Navigation from './components/Navigation/Navigation'
-
+import Home from './components/Home/Home'
+import UsersSpots from './components/UsersSpots/UsersSpots'
+import SpotDetails from './components/SpotDetails/SpotDetails'
+import SpotForm from './components/SpotForm/SpotForm'
 
 function Layout() {
   const dispatch = useDispatch()
@@ -27,11 +30,12 @@ function Layout() {
 
 const router = createBrowserRouter(createRoutesFromElements(
   <Route element={<Layout />}>
-    <Route path='/' element={<h1> Spots </h1>} />
+    <Route path='/' element={<Home />} />
     <Route path='/spots' element={<Outlet />}>
-      <Route path=':spotId' element={<h1>Spot placeholder</h1>} />
-      <Route path='new' element={<h1>Spot form placeholder</h1>} />
-      <Route path='current' element={<h1>User's spots placeholder</h1>} />
+      <Route path=':spotId' element={<SpotDetails />} />
+      <Route path=':spotId/edit' element={<SpotForm />} />
+      <Route path='new' element={<SpotForm />} />
+      <Route path='current' element={<UsersSpots />} />
     </Route>
     <Route path='*' element={<h1>404: Page not found</h1>} />
   </Route>
