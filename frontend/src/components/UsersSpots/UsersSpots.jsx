@@ -1,6 +1,6 @@
 const UsersSpots = () => {
     return (
-        <h2>User's spots</h2>
+        <h2>Users spots</h2>
     )
 }
 
