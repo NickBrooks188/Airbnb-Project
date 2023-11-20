@@ -3,11 +3,13 @@ import thunk from 'redux-thunk'
 import sessionReducer from './session'
 import spotsReducer from './spots'
 import selectedSpotReducer from './selectedSpot'
+import userSpotsReducer from './userSpots'
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   spots: spotsReducer,
-  selectedSpot: selectedSpotReducer
+  selectedSpot: selectedSpotReducer,
+  userSpots: userSpotsReducer
 })
 
 let enhancer

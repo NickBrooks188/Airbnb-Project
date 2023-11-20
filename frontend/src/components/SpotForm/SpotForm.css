@@ -1,0 +1,7 @@
+form>span {
+    color: red
+}
+
+form>label>span {
+    color: red
+}

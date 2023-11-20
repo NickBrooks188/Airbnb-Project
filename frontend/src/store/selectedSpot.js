@@ -25,7 +25,7 @@ export const getSingleSpot = (id) => async (dispatch) => {
     return res
 }
 
-export const getSingleSpotReviews = (id) => async (dispatch) => {
+export const getSingleSpotReviews = (id) => async () => {
     const res = await csrfFetch(`/api/spots/${id}/reviews`)
     return res
 }

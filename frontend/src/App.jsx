@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import * as sessionActions from './store/session'
 import Navigation from './components/Navigation/Navigation'
 import Home from './components/Home/Home'
-import UsersSpots from './components/UsersSpots/UsersSpots'
+import UserSpots from './components/UserSpots/UserSpots'
 import SpotDetails from './components/SpotDetails/SpotDetails'
 import SpotForm from './components/SpotForm/SpotForm'
 
@@ -33,9 +33,9 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<Home />} />
     <Route path='/spots' element={<Outlet />}>
       <Route path=':spotId' element={<SpotDetails />} />
-      <Route path=':spotId/edit' element={<SpotForm />} />
-      <Route path='new' element={<SpotForm />} />
-      <Route path='current' element={<UsersSpots />} />
+      <Route path=':spotId/edit' element={<SpotForm type={'edit'} />} />
+      <Route path='new' element={<SpotForm type={'create'} />} />
+      <Route path='current' element={<UserSpots />} />
     </Route>
     <Route path='*' element={<h1>404: Page not found</h1>} />
   </Route>

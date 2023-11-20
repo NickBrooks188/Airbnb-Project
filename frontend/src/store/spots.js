@@ -43,7 +43,7 @@ export const getAllSpots = () => async (dispatch) => {
 }
 
 export const editSpot = (spot) => async (dispatch) => {
-    const res = await csrfFetch(`api/spots/${spot.id}`, {
+    const res = await csrfFetch(`/api/spots/${spot.id}`, {
         method: 'PUT',
         body: JSON.stringify(spot)
     })
@@ -55,7 +55,7 @@ export const editSpot = (spot) => async (dispatch) => {
 }
 
 export const removeSpot = (spot) => async (dispatch) => {
-    const res = await csrfFetch(`api/spots/${spot.id}`, {
+    const res = await csrfFetch(`/api/spots/${spot.id}`, {
         method: 'DELETE'
     })
     if (res.ok) {
@@ -65,17 +65,24 @@ export const removeSpot = (spot) => async (dispatch) => {
 }
 
 export const createNewSpot = (spot) => async (dispatch) => {
-    const res = await csrfFetch(`api/spots/${spot.id}`, {
+    const res = await csrfFetch(`/api/spots`, {
         method: 'POST',
         body: JSON.stringify(spot)
     })
+    const data = await res.json()
     if (res.ok) {
-        const data = await res.json()
         dispatch(createSpot(data))
     }
-    return res
+    return data
 }
 
+export const addImageToSpot = (spotId, image) => async () => {
+    const res = await csrfFetch(`/api/spots/${spotId}/images`, {
+        method: "POST",
+        body: JSON.stringify(image)
+    })
+    return res
+}
 
 const initialState = {}
 
@@ -101,6 +108,7 @@ const spotsReducer = (state = initialState, action) => {
         case CREATE_SPOT: {
             const newState = { ...state }
             newState[action.spot.id] = action.spot
+            newState[action.spot.id].avgRating = "Not available"
             return newState
         }
         default:
