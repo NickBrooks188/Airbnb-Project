@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { createNewSpot, addImageToSpot } from '../../store/spots'
+import { createNewSpot, editSpot } from '../../store/spots'
 import { getSingleSpot, unsetSpot } from '../../store/selectedSpot'
 import './SpotForm.css'
 
@@ -19,13 +19,7 @@ const CreateSpotForm = ({ type }) => {
     }, [dispatch, spotId, type])
 
     let existingSpotData = useSelector(state => state.selectedSpot)
-    console.log('-------', existingSpotData)
 
-    if (type === 'create') {
-        existingSpotData = {}
-    } else if (spotId != existingSpotData.id) {
-        console.log('Data mismatch!', spotId, existingSpotData.id)
-    }
     const [country, setCountry] = useState(existingSpotData.country || '')
     const [address, setAddress] = useState(existingSpotData.address || '')
     const [city, setCity] = useState(existingSpotData.city || '')
@@ -39,25 +33,30 @@ const CreateSpotForm = ({ type }) => {
     const [errors, setErrors] = useState({})
 
     useEffect(() => {
-        setCountry(existingSpotData.country)
-        setAddress(existingSpotData.address)
-        setCity(existingSpotData.city)
-        setState(existingSpotData.state)
-        setLat(existingSpotData.lat)
-        setLng(existingSpotData.lng)
-        setDescription(existingSpotData.description)
-        setName(existingSpotData.name)
-        setPrice(existingSpotData.price)
+        setCountry(existingSpotData.country || '')
+        setAddress(existingSpotData.address || '')
+        setCity(existingSpotData.city || '')
+        setState(existingSpotData.state || '')
+        setLat(existingSpotData.lat || '')
+        setLng(existingSpotData.lng || '')
+        setDescription(existingSpotData.description || '')
+        setName(existingSpotData.name || '')
+        setPrice(existingSpotData.price || '')
         if (existingSpotData.SpotImages) {
+            console.log(existingSpotData.SpotImages)
+            let imagesArr = []
             const previewImage = existingSpotData.SpotImages.find(image => image.preview == true)
-            let otherImagesArr = existingSpotData.SpotImages.map(image => {
+            if (previewImage) imagesArr.push(previewImage.url)
+            existingSpotData.SpotImages.forEach(image => {
                 if (image.preview == false)
-                    return image.url
+                    imagesArr.push(image.url)
             })
-            const imagesArr = [previewImage, ...otherImagesArr]
+            while (imagesArr.length < 5) {
+                imagesArr.push('')
+            }
             setImages(imagesArr)
 
-        }
+        } else setImages(['', '', '', '', ''])
     }, [existingSpotData])
 
     const sessionUser = useSelector(state => state.session.user)
@@ -95,32 +94,26 @@ const CreateSpotForm = ({ type }) => {
         }
 
         const handleSpotCreation = async (spot) => {
-            const spotData = await dispatch(createNewSpot(spot))
-            console.log(spotData)
+            const spotData = await dispatch(createNewSpot(spot, images))
             if (!spotData.errors) {
-                for (let i = 0; i < images.length; i++) {
-                    if (images[i]) {
-                        const imageObj = {
-                            url: images[i],
-                            preview: (i === 0)
-                        }
-                        console.log(imageObj)
-                        const imgRes = await dispatch(addImageToSpot(spotData.id, imageObj))
-                        if (!imgRes.ok) {
-                            const imgData = await imgRes.json()
-                            const err = { ...errors }
-                            err[i] = imgData
-                            setErrors(err)
-                        }
-                    }
-                }
                 navigate(`/spots/${spotData.id}`)
             } else {
                 setErrors(spotData.errors)
             }
         }
-        handleSpotCreation(form)
 
+        const handleSpotEdit = async (spot) => {
+            const spotData = await dispatch(editSpot(spot, spotId))
+            if (!spotData.errors) {
+                navigate(`/spots/${spotData.id}`)
+            } else {
+                setErrors(spotData.errors)
+            }
+        }
+        if (type === 'create') handleSpotCreation(form)
+        if (type === 'edit') {
+            handleSpotEdit(form)
+        }
     }
 
     let title
@@ -225,44 +218,47 @@ const CreateSpotForm = ({ type }) => {
                         placeholder='Price per night (USD)' />
                     <span>{errors.price}</span>
                 </label>
-                <h2>Liven up your spot with photos</h2>
-                <h3>Submit a link to at least one photo to publish your spot</h3>
-                <input type='text'
-                    value={images[0]}
-                    className='wideInput'
-                    onChange={(e) => updateImages(e.target.value, 0)}
-                    placeholder='Preview Image URL' />
-                <span>{errors[0]}</span>
+                <div className={`photos ${type === 'create' ? '' : 'hidden'}`}>
 
-                <input type='text'
-                    value={images[1]}
-                    className='wideInput'
-                    onChange={(e) => updateImages(e.target.value, 1)}
-                    placeholder='Image URL' />
-                <span>{errors[1]}</span>
+                    <h2>Liven up your spot with photos</h2>
+                    <h3>Submit a link to at least one photo to publish your spot</h3>
+                    <input type='text'
+                        value={images[0]}
+                        className='wideInput'
+                        onChange={(e) => updateImages(e.target.value, 0)}
+                        placeholder='Preview Image URL' />
+                    <span>{errors[0]}</span>
 
-                <input type='text'
-                    value={images[2]}
-                    className='wideInput'
-                    onChange={(e) => updateImages(e.target.value, 2)}
-                    placeholder='Image URL' />
-                <span>{errors[2]}</span>
+                    <input type='text'
+                        value={images[1]}
+                        className='wideInput'
+                        onChange={(e) => updateImages(e.target.value, 1)}
+                        placeholder='Image URL' />
+                    <span>{errors[1]}</span>
 
-                <input type='text'
-                    value={images[3]}
-                    className='wideInput'
-                    onChange={(e) => updateImages(e.target.value, 3)}
-                    placeholder='Image URL' />
-                <span>{errors[3]}</span>
+                    <input type='text'
+                        value={images[2]}
+                        className='wideInput'
+                        onChange={(e) => updateImages(e.target.value, 2)}
+                        placeholder='Image URL' />
+                    <span>{errors[2]}</span>
 
-                <input type='text'
-                    value={images[4]}
-                    className='wideInput'
-                    onChange={(e) => updateImages(e.target.value, 4)}
-                    placeholder='Image URL' />
-                <span>{errors[4]}</span>
+                    <input type='text'
+                        value={images[3]}
+                        className='wideInput'
+                        onChange={(e) => updateImages(e.target.value, 3)}
+                        placeholder='Image URL' />
+                    <span>{errors[3]}</span>
 
-                <input type='submit' value='Create Spot' />
+                    <input type='text'
+                        value={images[4]}
+                        className='wideInput'
+                        onChange={(e) => updateImages(e.target.value, 4)}
+                        placeholder='Image URL' />
+                    <span>{errors[4]}</span>
+
+                </div>
+                <input type='submit' value={`${type} spot`} />
             </form>
 
         </>
@@ -270,39 +266,3 @@ const CreateSpotForm = ({ type }) => {
 }
 
 export default CreateSpotForm
-
-
-// {
-//     "id": 1,
-//     "ownerId": 1,
-//     "address": "123 Disney Lane",
-//     "city": "San Francisco",
-//     "state": "California",
-//     "country": "United States of America",
-//     "lat": 37.7645358,
-//     "lng": -122.4730327,
-//     "name": "App Academy",
-//     "description": "Place where web developers are created",
-//     "price": 123,
-//     "createdAt": "2021-11-19 20:39:36",
-//     "updatedAt": "2021-11-19 20:39:36",
-//     "numReviews": 5,
-//     "avgRating": 4.5,
-//     "SpotImages": [
-//         {
-//             "id": 1,
-//             "url": "image url",
-//             "preview": true
-//         },
-//         {
-//             "id": 2,
-//             "url": "image url",
-//             "preview": false
-//         }
-//     ],
-//     "Owner": {
-//         "id": 1,
-//         "firstName": "John",
-//         "lastName": "Smith"
-//     }
-// }

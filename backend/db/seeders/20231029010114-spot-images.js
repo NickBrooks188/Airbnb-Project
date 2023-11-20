@@ -15,10 +15,18 @@ const spotImages = [{
 }, {
   spotId: 2,
   url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7a/View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg/1200px-View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_%28cropped%29.jpg',
-  preview: false
+  preview: true
 }, {
   spotId: 3,
   url: 'https://cdn.choosechicago.com/uploads/2022/06/wygyk-agnostic-A.Alexander_5cloudgateMay13-scaled.jpg',
+  preview: true
+}, {
+  spotId: 1,
+  url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/LA_Downtown_View_%28cropped%29.jpg/800px-LA_Downtown_View_%28cropped%29.jpg',
+  preview: false
+}, {
+  spotId: 1,
+  url: 'https://cdn.britannica.com/22/154122-050-B1D0A7FD/Skyline-Los-Angeles-California.jpg',
   preview: false
 }]
 

@@ -5,3 +5,7 @@ form>span {
 form>label>span {
     color: red
 }
+
+.hidden {
+    visibility: none;
+}

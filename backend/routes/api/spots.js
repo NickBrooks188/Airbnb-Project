@@ -303,10 +303,8 @@ router.get('/current', requireAuth, async (req, res) => {
     for (let spot of spots) {
         spot = await spot.toJSON()
         let imageURL
-        for (let spotImage of spot.SpotImages) {
-            if (spotImage.preview) imageURL = spotImage.url
-            break
-        }
+        const previewImage = spot.SpotImages.find(img => img.preview == true)
+        if (previewImage) spot.previewImage = previewImage.url
         let reviewCount = spot.Reviews.length
         let reviewSum = 0
         for (let review of spot.Reviews) {
@@ -315,7 +313,6 @@ router.get('/current', requireAuth, async (req, res) => {
         delete spot.Reviews
         delete spot.SpotImages
         spot.avgRating = (reviewSum / reviewCount) || 'Not available'
-        spot.previewImage = imageURL
         result.push(spot)
     }
 
@@ -490,11 +487,8 @@ router.get('/', async (req, res, next) => {
     let result = []
     for (let spot of spots) {
         spot = await spot.toJSON()
-        for (let spotImage of spot.SpotImages) {
-            if (spotImage.preview === true) {
-                spot.previewImage = spotImage.url
-            }
-        }
+        const previewImage = spot.SpotImages.find(img => img.preview == true)
+        if (previewImage) spot.previewImage = previewImage.url
         const ratingCount = spot.Reviews.length
         let ratingSum = 0
         for (let review of spot.Reviews) {

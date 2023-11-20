@@ -42,16 +42,16 @@ export const getAllSpots = () => async (dispatch) => {
     return res
 }
 
-export const editSpot = (spot) => async (dispatch) => {
-    const res = await csrfFetch(`/api/spots/${spot.id}`, {
+export const editSpot = (spot, spotId) => async (dispatch) => {
+    const res = await csrfFetch(`/api/spots/${spotId}`, {
         method: 'PUT',
         body: JSON.stringify(spot)
     })
+    const data = await res.json()
     if (res.ok) {
-        const data = await res.json()
         dispatch(updateSpot(data))
     }
-    return res
+    return data
 }
 
 export const removeSpot = (spot) => async (dispatch) => {
@@ -64,25 +64,29 @@ export const removeSpot = (spot) => async (dispatch) => {
     return res
 }
 
-export const createNewSpot = (spot) => async (dispatch) => {
+export const createNewSpot = (spot, images) => async (dispatch) => {
     const res = await csrfFetch(`/api/spots`, {
         method: 'POST',
         body: JSON.stringify(spot)
     })
     const data = await res.json()
     if (res.ok) {
+        for (let i = 0; i < images.length; i++) {
+            const imgObj = { url: images[i], preview: (i === 0) }
+            const imageRes = await csrfFetch(`/api/spots/${data.id}/images`, {
+                method: "POST",
+                body: JSON.stringify(imgObj)
+            })
+            if (imageRes.ok && i === 0) {
+                const imageData = await imageRes.json()
+                data.previewImage = imageData.url
+            }
+        }
         dispatch(createSpot(data))
     }
     return data
 }
 
-export const addImageToSpot = (spotId, image) => async () => {
-    const res = await csrfFetch(`/api/spots/${spotId}/images`, {
-        method: "POST",
-        body: JSON.stringify(image)
-    })
-    return res
-}
 
 const initialState = {}
 
