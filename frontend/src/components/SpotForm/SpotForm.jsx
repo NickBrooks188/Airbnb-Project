@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { createNewSpot, addImageToSpot } from '../../store/spots'
-import { getSingleSpot } from '../../store/selectedSpot'
+import { getSingleSpot, unsetSpot } from '../../store/selectedSpot'
 import './SpotForm.css'
 
 const CreateSpotForm = ({ type }) => {
@@ -10,10 +10,17 @@ const CreateSpotForm = ({ type }) => {
     const dispatch = useDispatch()
     const { spotId } = useParams()
 
-    if (type === 'edit') dispatch(getSingleSpot(spotId))
-
+    useEffect(() => {
+        const runDispatches = async () => {
+            if (type === 'edit') await dispatch(getSingleSpot(spotId))
+            else await dispatch(unsetSpot())
+        }
+        runDispatches()
+    }, [dispatch, spotId, type])
 
     let existingSpotData = useSelector(state => state.selectedSpot)
+    console.log('-------', existingSpotData)
+
     if (type === 'create') {
         existingSpotData = {}
     } else if (spotId != existingSpotData.id) {
@@ -28,10 +35,30 @@ const CreateSpotForm = ({ type }) => {
     const [description, setDescription] = useState(existingSpotData.description || '')
     const [name, setName] = useState(existingSpotData.name || '')
     const [price, setPrice] = useState(existingSpotData.price || '')
-    // TODO put existimg images into array
     const [images, setImages] = useState(['', '', '', '', ''])
     const [errors, setErrors] = useState({})
 
+    useEffect(() => {
+        setCountry(existingSpotData.country)
+        setAddress(existingSpotData.address)
+        setCity(existingSpotData.city)
+        setState(existingSpotData.state)
+        setLat(existingSpotData.lat)
+        setLng(existingSpotData.lng)
+        setDescription(existingSpotData.description)
+        setName(existingSpotData.name)
+        setPrice(existingSpotData.price)
+        if (existingSpotData.SpotImages) {
+            const previewImage = existingSpotData.SpotImages.find(image => image.preview == true)
+            let otherImagesArr = existingSpotData.SpotImages.map(image => {
+                if (image.preview == false)
+                    return image.url
+            })
+            const imagesArr = [previewImage, ...otherImagesArr]
+            setImages(imagesArr)
+
+        }
+    }, [existingSpotData])
 
     const sessionUser = useSelector(state => state.session.user)
 
