@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { createNewSpot, addImageToSpot } from '../../store/spots'
+import { getSingleSpot } from '../../store/selectedSpot'
 import './SpotForm.css'
 
 const CreateSpotForm = ({ type }) => {
@@ -9,11 +10,14 @@ const CreateSpotForm = ({ type }) => {
     const dispatch = useDispatch()
     const { spotId } = useParams()
 
+    if (type === 'edit') dispatch(getSingleSpot(spotId))
+
+
     let existingSpotData = useSelector(state => state.selectedSpot)
     if (type === 'create') {
         existingSpotData = {}
-    } else if (spotId !== existingSpotData.id) {
-        alert('Data mismatch!')
+    } else if (spotId != existingSpotData.id) {
+        console.log('Data mismatch!', spotId, existingSpotData.id)
     }
     const [country, setCountry] = useState(existingSpotData.country || '')
     const [address, setAddress] = useState(existingSpotData.address || '')
@@ -98,13 +102,13 @@ const CreateSpotForm = ({ type }) => {
     }
 
     if (type === 'edit') {
-        title = (<h1>Create a new Spot</h1>)
+        title = (<h1>Update your Spot</h1>)
     }
     return (
         <>
             <form onSubmit={onSubmit}>
                 {title}
-                <h2>{`Where's your place locatied?`}</h2>
+                <h2>{`Where's your place located?`}</h2>
                 <h3>Guests will only get your exact addess once they booked a reservation.</h3>
                 <label>
                     Country
