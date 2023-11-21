@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-
+import OpenModalButton from '../OpenModalButton/OpenModalButton'
+import ConfirmSpotDeleteModal from '../SpotTile/ConfirmSpotDeleteModal'
 
 const UserSpotTile = ({ spot }) => {
     return (
@@ -13,7 +14,11 @@ const UserSpotTile = ({ spot }) => {
                 <Link to={`/spots/${spot.id}/edit`}>
                     <button className='update'>Update</button>
                 </Link>
-                <button className='delete'>Delete</button>
+                <OpenModalButton
+                    buttonText="Delete"
+                    className="delete"
+                    modalComponent={<ConfirmSpotDeleteModal spotId={spot.id} />}
+                />
             </div>
         </div>
     )

@@ -21,7 +21,7 @@ const UsersSpots = () => {
     return (
         <>
             <h2>Users spots</h2>
-            {userSpots.Spots.map((spot) => (<UserSpotTile spot={spot} key={spot.id} />))}
+            {Object.values(userSpots.Spots).map((spot) => (<UserSpotTile spot={spot} key={spot.id} />))}
         </>
     )
 }
