@@ -22,7 +22,8 @@ const ConfirmSpotDeleteModal = ({ spotId }) => {
             <h3>Are you sure you want to remove this spot from the listings?</h3>
             <button className='yesDelete' onClick={confirmDelete}>Yes (Delete Spot)</button>
             <button className='noDelete' onClick={closeModal}>No (Keep Spot)</button>
-        </>)
+        </>
+    )
 }
 
 export default ConfirmSpotDeleteModal
