@@ -3,6 +3,7 @@ import { csrfFetch } from "./csrf";
 const LOAD_SPOT = 'spots/loadSpot'
 const UNSET_SPOT = 'spots/unsetSpot'
 const ADD_REVIEW = 'spots/addReview'
+const DELETE_REVIEW = 'spot/deleteReview'
 
 const loadSpot = (spot) => {
     return {
@@ -22,6 +23,14 @@ const addReview = (review, user) => {
         type: ADD_REVIEW,
         review,
         user
+    }
+}
+
+const deleteReview = (reviewIndex, avgRating) => {
+    return {
+        type: DELETE_REVIEW,
+        reviewIndex,
+        avgRating
     }
 }
 
@@ -51,6 +60,16 @@ export const addReviewToSingleSpot = (review, spotId, userId) => async (dispatch
     return data
 }
 
+export const removeReviewFromSingleSpot = (reviewId, reviewIndex, avgRating) => async (dispatch) => {
+    const res = await csrfFetch(`/api/reviews/${reviewId}`, {
+        method: 'DELETE'
+    })
+    if (res.ok) {
+        dispatch(deleteReview(reviewIndex, avgRating))
+    }
+    return res
+}
+
 const initialState = {}
 
 const selectedSpotReducer = (state = initialState, action) => {
@@ -72,6 +91,15 @@ const selectedSpotReducer = (state = initialState, action) => {
             newState.numReviews++
             const newReviewWithUser = { ...action.review, User: { id: action.user.id, firstName: action.user.firstName } }
             newState.Reviews.push(newReviewWithUser)
+            return newState
+        }
+        case DELETE_REVIEW: {
+            const newState = { ...state }
+            const reviews = newState.Reviews
+            reviews.splice(action.reviewIndex)
+            newState.numReviews--
+            newState.avgRating = action.avgRating
+            newState.Reviews = reviews
             return newState
         }
         default:

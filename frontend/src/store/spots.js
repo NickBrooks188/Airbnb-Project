@@ -5,6 +5,7 @@ const UPDATE_SPOT = 'spots/updateSpot'
 const DELETE_SPOT = 'spots/deleteSpot'
 const CREATE_SPOT = 'spots/createSpot'
 const ADD_REVIEW_TO_SPOT = 'spots/addReviewToSpot'
+const REMOVE_REVIEW_FROM_SPOT = 'spots.removeReviewFromSpot'
 
 const loadSpots = (spots) => {
     return {
@@ -40,6 +41,14 @@ export const addReviewToSpot = (stars, spotId, numReviews) => {
         stars,
         spotId,
         numReviews
+    }
+}
+
+export const removeReviewFromSpot = (spotId, avgStars) => {
+    return {
+        type: REMOVE_REVIEW_FROM_SPOT,
+        spotId,
+        avgStars
     }
 }
 
@@ -127,9 +136,16 @@ const spotsReducer = (state = initialState, action) => {
         }
         case ADD_REVIEW_TO_SPOT: {
             const newState = { ...state }
-            let avgRating = newState[action.spotId].avgRating
-            if (avgRating == 'Not available') avgRating = 0
-            newState[action.spotId].avgRating = (avgRating * action.numReviews + action.stars) / (action.numReviews + 1)
+            if (newState[action.spotId]) {
+                let avgRating = newState[action.spotId].avgRating
+                if (avgRating == 'Not available') avgRating = 0
+                newState[action.spotId].avgRating = (avgRating * action.numReviews + action.stars) / (action.numReviews + 1)
+            }
+            return newState
+        }
+        case REMOVE_REVIEW_FROM_SPOT: {
+            const newState = { ...state }
+            if (newState[action.spotId]) newState[action.spotId].avgRating = action.avgRating
             return newState
         }
         default:

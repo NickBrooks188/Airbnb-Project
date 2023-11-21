@@ -12,7 +12,6 @@ const SpotDetails = () => {
     const spot = useSelector((state) => state.selectedSpot)
 
     const sessionUser = useSelector(state => state.session.user)
-
     useEffect(() => {
         dispatch(getSingleSpot(spotId))
 
@@ -31,12 +30,6 @@ const SpotDetails = () => {
             />)
         }
     }
-    let deleteReviewButton = (
-        (<OpenModalButton
-            buttonText="Delete"
-            modalComponent={<ConfirmReviewDeleteModal />}
-        />)
-    )
 
     let noReviewsNotice
     if (!spot.Reviews.length) noReviewsNotice = (<p>Be the first to post a review!</p>)
@@ -84,7 +77,10 @@ const SpotDetails = () => {
                             <h4>{review.User.firstName}</h4>
                             <h5>{`${months[date.getMonth()]} ${date.getFullYear()}`}</h5>
                             <p>{review.review}</p>
-                            {(review.User.id == sessionUser.id) && deleteReviewButton}
+                            {(sessionUser && (review.User.id == sessionUser.id)) && (<OpenModalButton
+                                buttonText="Delete"
+                                modalComponent={<ConfirmReviewDeleteModal numReviews={spot.Reviews.length} avgRating={spot.avgRating} review={review} />}
+                            />)}
 
                         </div>
                     )
