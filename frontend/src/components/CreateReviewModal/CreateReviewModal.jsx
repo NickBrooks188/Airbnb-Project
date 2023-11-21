@@ -1,23 +1,42 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addReviewToSingleSpot } from '../../store/selectedSpot'
+import { addReviewToSpot } from '../../store/spots'
+import { useModal } from '../../context/Modal'
 import './CreateReviewModal.css'
 
-const CreateReviewModal = () => {
+const CreateReviewModal = ({ numReviews, spotId }) => {
+    const dispatch = useDispatch()
+    const { closeModal } = useModal()
+
+    const sessionUser = useSelector(state => state.session.user)
+
     const [review, setReview] = useState('')
     const [stars, setStars] = useState(0)
+    const [errors, setErrors] = useState({})
 
     const onSubmit = async (e) => {
         e.preventDefault()
+        setErrors({})
         const form = {
             review,
             stars: parseInt(stars)
         }
-        const res = await sendReview()
+        const newReview = await dispatch(addReviewToSingleSpot(form, spotId, sessionUser))
+        if (newReview.errors) {
+            setErrors(newReview.errors)
+            return
+        }
+        await dispatch(addReviewToSpot(newReview.stars, newReview.spotId, numReviews))
+        closeModal()
     }
     return (
-        <form >
+        <form onSubmit={onSubmit}>
             <h1>How was your stay?</h1>
-            <span>errors span</span>
+            <span>{errors.review}</span>
             <textarea className='reviewText' value={review} onChange={(e) => setReview(e.target.value)}></textarea>
+            <span>{errors.stars}</span>
+
             <div className='starWrapper'>
 
                 <div className={`stars ${stars > 4 && 'selected'}`} onClick={() => setStars(5)}>★</div>

@@ -4,6 +4,7 @@ const LOAD_SPOTS = 'spots/loadSpots'
 const UPDATE_SPOT = 'spots/updateSpot'
 const DELETE_SPOT = 'spots/deleteSpot'
 const CREATE_SPOT = 'spots/createSpot'
+const ADD_REVIEW_TO_SPOT = 'spots/addReviewToSpot'
 
 const loadSpots = (spots) => {
     return {
@@ -30,6 +31,15 @@ const createSpot = (spot) => {
     return {
         type: CREATE_SPOT,
         spot
+    }
+}
+
+export const addReviewToSpot = (stars, spotId, numReviews) => {
+    return {
+        type: ADD_REVIEW_TO_SPOT,
+        stars,
+        spotId,
+        numReviews
     }
 }
 
@@ -113,6 +123,13 @@ const spotsReducer = (state = initialState, action) => {
             const newState = { ...state }
             newState[action.spot.id] = action.spot
             newState[action.spot.id].avgRating = "Not available"
+            return newState
+        }
+        case ADD_REVIEW_TO_SPOT: {
+            const newState = { ...state }
+            let avgRating = newState[action.spotId].avgRating
+            if (avgRating == 'Not available') avgRating = 0
+            newState[action.spotId].avgRating = (avgRating * action.numReviews + action.stars) / (action.numReviews + 1)
             return newState
         }
         default:

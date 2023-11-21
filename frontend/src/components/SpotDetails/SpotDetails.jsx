@@ -1,27 +1,22 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { getSingleSpot, getSingleSpotReviews } from '../../store/selectedSpot'
+import { getSingleSpot } from '../../store/selectedSpot'
 import OpenModalButton from '../OpenModalButton/OpenModalButton'
 import CreateReviewModal from '../CreateReviewModal/CreateReviewModal'
+import ConfirmReviewDeleteModal from './ConfirmReviewDeleteModal'
 
 const SpotDetails = () => {
     const dispatch = useDispatch()
     const { spotId } = useParams()
     const spot = useSelector((state) => state.selectedSpot)
-    const [reviews, setReviews] = useState([])
 
     const sessionUser = useSelector(state => state.session.user)
 
     useEffect(() => {
         dispatch(getSingleSpot(spotId))
-        const getReviews = async () => {
-            const rev = await (dispatch(getSingleSpotReviews(spotId)))
-            const parsedReviews = await rev.json()
-            setReviews(parsedReviews.Reviews)
-        }
-        getReviews()
-    }, [dispatch, setReviews, spotId])
+
+    }, [dispatch, spotId])
     if (!spot.id) return null
     if (spot.id != spotId) return null
 
@@ -29,16 +24,22 @@ const SpotDetails = () => {
 
     let createReviewButton
     if (sessionUser) {
-        if (!reviews.find(review => review.userId == sessionUser.id) && spot.ownerId != sessionUser.id) {
+        if (!spot.Reviews.find(review => review.userId == sessionUser.id) && spot.ownerId != sessionUser.id) {
             createReviewButton = (<OpenModalButton
                 buttonText="Post Your Review"
-                modalComponent={<CreateReviewModal />}
+                modalComponent={<CreateReviewModal numReviews={spot.Reviews.length} spotId={spotId} />}
             />)
         }
     }
+    let deleteReviewButton = (
+        (<OpenModalButton
+            buttonText="Delete"
+            modalComponent={<ConfirmReviewDeleteModal />}
+        />)
+    )
 
     let noReviewsNotice
-    if (!reviews.length) noReviewsNotice = (<p>Be the first to post a review!</p>)
+    if (!spot.Reviews.length) noReviewsNotice = (<p>Be the first to post a review!</p>)
     return (
         <div className='spotWrapper'>
             <div className='spotHeader'>
@@ -68,14 +69,14 @@ const SpotDetails = () => {
                 </div>
                 <div className='booking'>
                     <h2>{`$${spot.price.toFixed(2)} night`}</h2>
-                    <span>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)} · ${spot.numReviews} review${reviews.length !== 1 ? 's' : ''}`}</span>
+                    <span>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)} · ${spot.numReviews} review${spot.Reviews.length !== 1 ? 's' : ''}`}</span>
                 </div>
             </div>
             <div className='reviewsWrapper'>
-                <h1>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)} · ${spot.numReviews} review${reviews.length !== 1 ? 's' : ''}`}</h1>
+                <h1>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)} · ${spot.numReviews} review${spot.Reviews.length !== 1 ? 's' : ''}`}</h1>
                 {sessionUser && createReviewButton}
                 {noReviewsNotice}
-                {reviews.map((review) => {
+                {spot.Reviews.map((review) => {
                     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
                     const date = new Date(review.createdAt)
                     return (
@@ -83,6 +84,8 @@ const SpotDetails = () => {
                             <h4>{review.User.firstName}</h4>
                             <h5>{`${months[date.getMonth()]} ${date.getFullYear()}`}</h5>
                             <p>{review.review}</p>
+                            {(review.User.id == sessionUser.id) && deleteReviewButton}
+
                         </div>
                     )
                 })}
