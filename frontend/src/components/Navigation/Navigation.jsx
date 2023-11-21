@@ -39,13 +39,14 @@ function Navigation({ isLoaded }) {
     }
 
     return (
-        <ul>
-            <li>
-                <NavLink to="/">Home</NavLink>
-            </li>
-            {sessionUser && createNewSpot}
-            {isLoaded && sessionLinks}
-        </ul>
+        <nav>
+            <NavLink to="/">Home</NavLink>
+            <ul>
+                {sessionUser && createNewSpot}
+                {isLoaded && sessionLinks}
+            </ul>
+
+        </nav>
     )
 }
 

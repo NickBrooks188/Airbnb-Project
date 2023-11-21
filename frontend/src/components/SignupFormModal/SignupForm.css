@@ -1,0 +1,12 @@
+#modal-content>form>label {
+    width: 100%;
+}
+
+#modal-content>form>label>input {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#modal-content>form>label>span {
+    margin-left: 20px;
+}

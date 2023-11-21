@@ -1,0 +1,18 @@
+.userSpotTile {
+    width: 200px;
+    height: 200px;
+}
+
+.userTileContent {
+    width: 100%;
+    height: 100%;
+}
+
+img {
+    width: 100%
+}
+
+a {
+    text-decoration: none;
+    color: black
+}

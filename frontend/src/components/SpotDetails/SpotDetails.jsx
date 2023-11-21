@@ -5,6 +5,7 @@ import { getSingleSpot } from '../../store/selectedSpot'
 import OpenModalButton from '../OpenModalButton/OpenModalButton'
 import CreateReviewModal from '../CreateReviewModal/CreateReviewModal'
 import ConfirmReviewDeleteModal from './ConfirmReviewDeleteModal'
+import './SpotDetails.css'
 
 const SpotDetails = () => {
     const dispatch = useDispatch()
@@ -49,7 +50,6 @@ const SpotDetails = () => {
                             return (<div className='imgWrapper' key={img.id}>
                                 <img src={img.url} />
                             </div>)
-
                     }
                     )}
 
@@ -63,6 +63,7 @@ const SpotDetails = () => {
                 <div className='booking'>
                     <h2>{`$${spot.price.toFixed(2)} night`}</h2>
                     <span>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)} · ${spot.numReviews} review${spot.Reviews.length !== 1 ? 's' : ''}`}</span>
+                    <button className='bookingButton' onClick={() => alert('Coming soon!')}>Reserve</button>
                 </div>
             </div>
             <div className='reviewsWrapper'>

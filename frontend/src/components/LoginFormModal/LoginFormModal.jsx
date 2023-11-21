@@ -14,44 +14,39 @@ function LoginFormModal() {
 
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         setErrors({})
-        return dispatch(sessionActions.login({ credential, password }))
-            .then(closeModal)
-            .catch(
-                async (res) => {
-                    const data = await res.json()
-                    if (data?.message) setErrors(data.message)
-                }
-            )
+        const data = await dispatch(sessionActions.login({ credential, password }))
+        console.log(data)
+        if (data.message) {
+            console.log(data)
+            if (data?.message) setErrors(data)
+        } else {
+            closeModal()
+        }
     }
 
     return (
         <>
             <h1>Log In</h1>
             <form onSubmit={handleSubmit}>
-                <label>
-                    Username or Email
-                    <input
-                        type="text"
-                        value={credential}
-                        onChange={(e) => setCredential(e.target.value)}
-                        required
-                    />
-                </label>
-                <label>
-                    Password
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </label>
-                {errors.credential && <p>{errors.credential}</p>}
-                <button type="submit">Log In</button>
+                <input
+                    type="text"
+                    value={credential}
+                    onChange={(e) => setCredential(e.target.value)}
+                    required
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+                {errors.message && <span>The provided credentials were invalid</span>}
+                <button type="submit" disabled={(credential.length < 4 || password.length < 6)}>Log In</button>
             </form>
+            <div className='demo-user'>Demo user</div>
         </>
     )
 }

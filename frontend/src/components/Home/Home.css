@@ -1,0 +1,61 @@
+body {
+    font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+}
+
+button {
+    background-color: #FF385C;
+    color: white;
+    border: none;
+    width: 200px;
+    height: 36px;
+    border-radius: 3px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #de3554;
+}
+
+.spotTileWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: auto;
+}
+
+.spotTile {
+    width: 300px;
+    height: 400px;
+    overflow: hidden;
+    padding: 0px;
+}
+
+.tileContent>.spotTileImgWrapper {
+    height: 75%;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.tileContent>.spotTileImgWrapper>img {
+    height: 100%;
+    width: auto;
+}
+
+.locationRatings {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 5px;
+    height: 30px;
+}
+
+.tileContent>span {
+    padding-left: 10px;
+    margin: 0px;
+}

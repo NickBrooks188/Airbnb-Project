@@ -1,0 +1,76 @@
+h2 {
+    margin-left: 5%;
+}
+
+.createNewSpot {
+    margin-left: 5%;
+    margin-bottom: 20px;
+}
+
+.userSpotTileWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: auto;
+}
+
+.userSpotTile {
+    width: 300px;
+    height: 430px;
+    overflow: hidden;
+    padding: 0px;
+}
+
+.userTileContent>.spotTileImgWrapper {
+    height: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.userTileContent>span {
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 50%;
+}
+
+.userTileContent>.spotTileImgWrapper>img {
+    height: 100%;
+    width: auto;
+}
+
+.locationRatings {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top: 5px;
+    height: 30px;
+}
+
+.tileContent>span {
+    padding-left: 10px;
+    margin: 0px;
+}
+
+.update {
+    width: 135px;
+    height: 30px;
+    margin-left: 10px;
+    margin-top: 10px;
+    background-color: #333;
+}
+
+.update:hover {
+    background-color: #444;
+}
+
+.userTileContent>.openModalButton {
+    width: 135px;
+    height: 30px;
+    margin-left: 10px;
+    margin-top: 10px;
+}

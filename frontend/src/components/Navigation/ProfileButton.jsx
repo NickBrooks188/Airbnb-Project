@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import * as sessionActions from '../../store/session'
 
 const ProfileButton = ({ user }) => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const [showMenu, setShowMenu] = useState(false)
     const ulRef = useRef()
 
@@ -32,6 +34,7 @@ const ProfileButton = ({ user }) => {
     const logout = (e) => {
         e.preventDefault()
         dispatch(sessionActions.logout())
+        navigate('/')
     }
 
     const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden")
@@ -39,13 +42,12 @@ const ProfileButton = ({ user }) => {
 
     return (
         <>
-            <button onClick={toggleMenu}>
+            <button onClick={toggleMenu} className='profileButton'>
                 <i className="fa-regular fa-user"></i>
             </button>
             <ul className={ulClassName} ref={ulRef}>
-                <li>{user.username}</li>
-                <li>{user.firstName} {user.lastName}</li>
-                <li>{user.email}</li>
+                <li className='profile-text'>Hello, {user.firstName}</li>
+                <li className='profile-text extra-margin'>{user.email}</li>
                 <li>
                     <Link to='/spots/current'>Manage Spots</Link>
                 </li>

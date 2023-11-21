@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { getAllSpots } from '../../store/spots'
 import SpotTile from '../SpotTile/SpotTile'
+import './Home.css'
 
 
 const Home = () => {
@@ -18,8 +19,11 @@ const Home = () => {
     return (
         <>
             <h2>Home component</h2>
-            {spotsArr.map((spot) => (<SpotTile spot={spot} key={spot.id} />)
-            )}
+            <div className='spotTileWrapper'>
+                {spotsArr.map((spot) => (<SpotTile spot={spot} key={spot.id} />)
+                )}
+
+            </div>
         </>
 
     )

@@ -1,0 +1,111 @@
+.spotHeader {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+.imagesWrapper {
+    height: 500px;
+    display: flex;
+    flex-wrap: nowrap;
+    width: 90%;
+    margin: auto;
+}
+
+.previewImgWrapper {
+    width: 50%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    border: 3px solid white;
+    box-sizing: border-box;
+}
+
+.previewImgWrapper>img {
+    height: 100%;
+    width: auto
+}
+
+.otherImagesWrapper {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.otherImagesWrapper>.imgWrapper {
+    width: 50%;
+    height: 50%;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: 3px solid white;
+    display: flex;
+    justify-content: center;
+}
+
+.otherImagesWrapper>.imgWrapper>img {
+    height: 100%;
+    width: auto;
+}
+
+.details {
+    margin-left: 5%;
+    margin-right: 5%;
+    display: flex;
+    flex-wrap: nowrap;
+    width: 90%;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid black;
+    margin-top: 20px;
+}
+
+.booking {
+    width: 350px;
+    border: 3px solid black;
+    border-radius: 5px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.booking>span {
+    font-size: 18px;
+}
+
+.bookingButton {
+    width: 340px;
+    margin: 0px;
+}
+
+.reviewsWrapper {
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 20px;
+}
+
+.reviewWrapper {
+    margin-top: 20px;
+}
+
+.reviewWrapper>h4 {
+    margin: 5px;
+    padding: 0px;
+    font-size: 22px;
+}
+
+.reviewWrapper>h5 {
+    margin: 5px;
+    padding: 0px;
+    color: #666;
+    font-size: 20px;
+}
+
+.reviewWrapper>p {
+    margin: 5px;
+    padding: 0px;
+    font-size: 18px;
+}

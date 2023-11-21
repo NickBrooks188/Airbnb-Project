@@ -1,3 +1,115 @@
 .hidden {
     display: none
 }
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #AAA;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+nav>ul {
+    margin: 0px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+nav>ul>li {
+    list-style-type: none;
+}
+
+.openModalButton {
+    width: 100px;
+    height: 30px;
+    border: none;
+    color: white;
+    background-color: #FF385C;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0px;
+}
+
+.openModalButton:hover {
+    background-color: #de3554;
+}
+
+.profileButton {
+    width: 40px;
+    height: 40px;
+    background-color: #FF385C;
+    border-radius: 20px;
+    color: white;
+    border: none
+}
+
+.profileButton:hover {
+    background-color: #de3554;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 60px;
+    right: 10px;
+    box-shadow: 0px 0px 5px 2px rgba(100, 100, 100, 0.2);
+    padding: 0px;
+    border-radius: 10px;
+    width: 240px;
+    overflow: hidden;
+    z-index: 10;
+    background-color: white;
+}
+
+.profile-dropdown>li {
+    list-style-type: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.profile-dropdown>.profile-text {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+.profile-dropdown>.extra-margin {
+    margin-bottom: 30px;
+}
+
+.profile-dropdown>li>a {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    margin-left: 0px;
+    margin-top: 50px;
+    padding-left: 20px;
+    padding-right: 200px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-wrap: nowrap;
+}
+
+.profile-dropdown>li>a:hover {
+    background-color: #EEE;
+}
+
+.profile-dropdown>li>button {
+    background-color: #FF385C;
+    color: white;
+    border: none;
+    width: 200px;
+    height: 36px;
+    margin-top: 10px;
+    border-radius: 3px;
+    margin-left: 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.profile-dropdown>li>button:hover {
+    background-color: #de3554;
+}
