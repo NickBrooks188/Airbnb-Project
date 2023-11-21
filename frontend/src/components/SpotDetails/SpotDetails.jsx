@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { getSingleSpot, getSingleSpotReviews } from '../../store/selectedSpot'
 import OpenModalButton from '../OpenModalButton/OpenModalButton'
-import CreateReviewModal from '../CreateReviewModal/CreateReviewModel'
+import CreateReviewModal from '../CreateReviewModal/CreateReviewModal'
 
 const SpotDetails = () => {
     const dispatch = useDispatch()

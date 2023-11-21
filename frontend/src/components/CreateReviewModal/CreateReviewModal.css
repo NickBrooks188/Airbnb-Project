@@ -1,0 +1,23 @@
+.starWrapper {
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    flex-direction: row-reverse;
+}
+
+.stars {
+    font-size: 36px;
+    color: #CCC;
+    width: 40px;
+    height: 50px;
+    cursor: pointer;
+}
+
+.stars:hover,
+.stars:hover~.stars {
+    color: #d34d52
+}
+
+.selected {
+    color: #FF5B60
+}
