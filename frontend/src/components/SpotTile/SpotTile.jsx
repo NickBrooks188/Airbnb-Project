@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom'
 import './SpotTile.css'
 
 const SpotTile = ({ spot }) => {
-    console.log('~~~~~', typeof spot.avgRating)
-    console.log(spot)
     return (
         <div className="spotTile">
             <Link to={`spots/${spot.id}`}>
