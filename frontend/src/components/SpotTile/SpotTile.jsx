@@ -14,6 +14,7 @@ const SpotTile = ({ spot }) => {
                         <span>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)}`}</span>
                     </div>
                     <span>{`$${spot.price.toFixed(2)} night`}</span>
+                    <div className='spotTileTooltip'>{spot.name}</div>
                 </div>
             </Link>
         </div>

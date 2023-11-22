@@ -1,12 +1,11 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useModal } from '../../context/Modal'
 import { removeReviewFromSingleSpot } from '../../store/selectedSpot'
 import { removeReviewFromSpot } from '../../store/spots'
 
-const ConfirmReviewDeleteModal = ({ numReviews, avgRating, review }) => {
+const ConfirmReviewDeleteModal = ({ numReviews, avgRating, review, spot }) => {
     const { closeModal } = useModal()
     const dispatch = useDispatch()
-    const spot = useSelector((state) => state.selectedSpot)
 
     const confirmDelete = async () => {
         const reviewStars = review.stars

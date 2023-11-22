@@ -5,8 +5,13 @@
 #modal-content>form>label>input {
     width: 100%;
     margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
 #modal-content>form>label>span {
     margin-left: 20px;
+}
+
+.signupForm>button {
+    margin-top: 20px;
 }

@@ -11,7 +11,8 @@
     margin-left: 0px;
 }
 
-.spotForm>h3 {
+.spotForm>h3,
+.photos>h3 {
     font-weight: 300;
 }
 
@@ -95,6 +96,7 @@ form>div>span {
     color: red;
     font-size: 14px;
     padding-left: 8px;
+    padding-top: 1px;
 }
 
 textarea {

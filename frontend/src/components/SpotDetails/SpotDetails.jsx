@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom'
 import { getSingleSpot } from '../../store/selectedSpot'
 import OpenModalButton from '../OpenModalButton/OpenModalButton'
 import CreateReviewModal from '../CreateReviewModal/CreateReviewModal'
-import ConfirmReviewDeleteModal from './ConfirmReviewDeleteModal'
+import ConfirmReviewDeleteModal from '../ConfirmDeleteModal/ConfirmReviewDeleteModal'
 import './SpotDetails.css'
 
 const SpotDetails = () => {
@@ -27,13 +27,17 @@ const SpotDetails = () => {
         if (!spot.Reviews.find(review => review.userId == sessionUser.id) && spot.ownerId != sessionUser.id) {
             createReviewButton = (<OpenModalButton
                 buttonText="Post Your Review"
-                modalComponent={<CreateReviewModal numReviews={spot.Reviews.length} spotId={spotId} />}
+                modalComponent={<CreateReviewModal numReviews={spot.Reviews.length} spotId={spotId} sessionUser={sessionUser} />}
             />)
         }
     }
 
     let noReviewsNotice
-    if (!spot.Reviews.length) noReviewsNotice = (<p>Be the first to post a review!</p>)
+    let reviewFacts = ''
+    if (!spot.Reviews.length && spot.Owner.id != sessionUser.id) noReviewsNotice = (<p>Be the first to post a review!</p>)
+    else reviewFacts = `· ${spot.numReviews} review${spot.Reviews.length !== 1 ? 's' : ''
+        }`
+    console.log(noReviewsNotice)
     return (
         <div className='spotWrapper'>
             <div className='spotHeader'>
@@ -62,12 +66,12 @@ const SpotDetails = () => {
                 </div>
                 <div className='booking'>
                     <h2>{`$${spot.price.toFixed(2)} night`}</h2>
-                    <span>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)} · ${spot.numReviews} review${spot.Reviews.length !== 1 ? 's' : ''}`}</span>
+                    <span>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)} ${reviewFacts}`}</span>
                     <button className='bookingButton' onClick={() => alert('Coming soon!')}>Reserve</button>
                 </div>
             </div>
             <div className='reviewsWrapper'>
-                <h1>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)} · ${spot.numReviews} review${spot.Reviews.length !== 1 ? 's' : ''}`}</h1>
+                <h1>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)} ${reviewFacts}`}</h1>
                 {sessionUser && createReviewButton}
                 {noReviewsNotice}
                 {spot.Reviews.slice(0).reverse().map((review) => {
@@ -80,7 +84,7 @@ const SpotDetails = () => {
                             <p>{review.review}</p>
                             {(sessionUser && (review.User.id == sessionUser.id)) && (<OpenModalButton
                                 buttonText="Delete"
-                                modalComponent={<ConfirmReviewDeleteModal numReviews={spot.Reviews.length} avgRating={spot.avgRating} review={review} />}
+                                modalComponent={<ConfirmReviewDeleteModal numReviews={spot.Reviews.length} avgRating={spot.avgRating} review={review} spot={spot} />}
                             />)}
 
                         </div>

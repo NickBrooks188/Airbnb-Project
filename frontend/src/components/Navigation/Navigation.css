@@ -44,6 +44,14 @@ nav>a>img {
     background-color: #de3554;
 }
 
+.signUp>.openModalButton {
+    background-color: #333;
+}
+
+.signUp>.openModalButton:hover {
+    background-color: #444;
+}
+
 .profileButton {
     width: 40px;
     height: 40px;
@@ -118,4 +126,14 @@ nav>a>img {
 
 .profile-dropdown>li>button:hover {
     background-color: #de3554;
+}
+
+.newSpotLink {
+    margin-right: 13px;
+    color: #0066CC;
+    font-size: 16px;
+}
+
+.newSpotLink:hover {
+    text-decoration: underline;
 }

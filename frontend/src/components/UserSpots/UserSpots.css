@@ -55,22 +55,3 @@ h2 {
     padding-left: 10px;
     margin: 0px;
 }
-
-.update {
-    width: 135px;
-    height: 30px;
-    margin-left: 10px;
-    margin-top: 10px;
-    background-color: #333;
-}
-
-.update:hover {
-    background-color: #444;
-}
-
-.userTileContent>.openModalButton {
-    width: 135px;
-    height: 30px;
-    margin-left: 10px;
-    margin-top: 10px;
-}

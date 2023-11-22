@@ -10,7 +10,7 @@ function Navigation({ isLoaded }) {
     const sessionUser = useSelector((state) => state.session.user)
 
     const createNewSpot = (
-        <Link to='/spots/new'>Create a New Spot</Link>
+        <Link to='/spots/new' className='newSpotLink' >Create a New Spot</Link>
     )
     let sessionLinks
     if (sessionUser) {
@@ -28,7 +28,7 @@ function Navigation({ isLoaded }) {
                         modalComponent={<LoginFormModal />}
                     />
                 </li>
-                <li>
+                <li className='signUp'>
                     <OpenModalButton
                         buttonText="Sign Up"
                         modalComponent={<SignupFormModal />}

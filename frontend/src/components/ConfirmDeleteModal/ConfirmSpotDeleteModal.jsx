@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import { useModal } from '../../context/Modal'
 import { removeSpot } from '../../store/spots'
-import { removeUserSpot } from '../../store/userSpots'
+import { removeUserSpot } from '../../store/userSpots.js'
 
 const ConfirmSpotDeleteModal = ({ spotId }) => {
     const { closeModal } = useModal()

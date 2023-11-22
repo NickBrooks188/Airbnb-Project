@@ -22,6 +22,7 @@ button:hover {
     flex-wrap: wrap;
     justify-content: space-around;
     margin: auto;
+    max-width: 1400px;
 }
 
 .spotTile {

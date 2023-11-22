@@ -1,6 +1,7 @@
 .spotTile {
     width: 200px;
     height: 200px;
+    overflow: hidden;
 }
 
 .tileContent {
@@ -15,4 +16,19 @@ img {
 a {
     text-decoration: none;
     color: black
+}
+
+.tileContent:hover .spotTileTooltip {
+    visibility: visible;
+}
+
+.spotTileTooltip {
+    visibility: hidden;
+    position: relative;
+    bottom: 220px;
+    z-index: 9;
+    background-color: white;
+    width: auto;
+    text-align: center;
+    padding: 5px;
 }

@@ -1,15 +1,13 @@
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { addReviewToSingleSpot } from '../../store/selectedSpot'
 import { addReviewToSpot } from '../../store/spots'
 import { useModal } from '../../context/Modal'
 import './CreateReviewModal.css'
 
-const CreateReviewModal = ({ numReviews, spotId }) => {
+const CreateReviewModal = ({ numReviews, spotId, sessionUser }) => {
     const dispatch = useDispatch()
     const { closeModal } = useModal()
-
-    const sessionUser = useSelector(state => state.session.user)
 
     const [review, setReview] = useState('')
     const [stars, setStars] = useState(0)
