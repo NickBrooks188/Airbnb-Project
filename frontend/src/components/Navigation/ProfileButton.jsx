@@ -49,7 +49,7 @@ const ProfileButton = ({ user }) => {
                 <li className='profile-text'>Hello, {user.firstName}</li>
                 <li className='profile-text extra-margin'>{user.email}</li>
                 <li>
-                    <Link to='/spots/current'>Manage Spots</Link>
+                    <Link to='/spots/current'>Manage Spots <i className="fa-solid fa-arrow-right"></i></Link>
                 </li>
                 <li>
                     <button onClick={logout}>Log Out</button>

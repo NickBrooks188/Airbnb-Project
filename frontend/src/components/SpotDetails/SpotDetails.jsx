@@ -70,7 +70,7 @@ const SpotDetails = () => {
                 <h1>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)} · ${spot.numReviews} review${spot.Reviews.length !== 1 ? 's' : ''}`}</h1>
                 {sessionUser && createReviewButton}
                 {noReviewsNotice}
-                {spot.Reviews.map((review) => {
+                {spot.Reviews.slice(0).reverse().map((review) => {
                     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
                     const date = new Date(review.createdAt)
                     return (

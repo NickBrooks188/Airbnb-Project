@@ -3,6 +3,14 @@
     margin-right: 5%;
 }
 
+.spotHeader>h2 {
+    margin-left: 0;
+}
+
+.spotHeader>h3 {
+    color: #666;
+}
+
 .imagesWrapper {
     height: 500px;
     display: flex;
@@ -59,6 +67,15 @@
     margin-top: 20px;
 }
 
+.description {
+    width: 500px;
+}
+
+.description>h2 {
+    padding-left: 0px;
+    margin-left: 0px;
+}
+
 .booking {
     width: 350px;
     border: 3px solid black;
@@ -88,7 +105,7 @@
 }
 
 .reviewWrapper {
-    margin-top: 20px;
+    margin-top: 40px;
 }
 
 .reviewWrapper>h4 {
@@ -108,4 +125,8 @@
     margin: 5px;
     padding: 0px;
     font-size: 18px;
+}
+
+.reviewsWrapper>button {
+    width: 200px;
 }

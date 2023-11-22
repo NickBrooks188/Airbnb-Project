@@ -126,98 +126,92 @@ const CreateSpotForm = ({ type }) => {
     }
     return (
         <>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={onSubmit} className='spotForm'>
                 {title}
                 <h2>{`Where's your place located?`}</h2>
                 <h3>Guests will only get your exact addess once they booked a reservation.</h3>
-                <label>
+                <label className='wideInput'>
                     Country
                     <span>{errors.country}</span>
                     <input type='text'
                         value={country}
-                        className='wideInput'
                         onChange={(e) => setCountry(e.target.value)}
                         placeholder='Country' />
                 </label>
-                <label>
+                <label className='wideInput'>
                     Street Address
                     <span>{errors.address}</span>
                     <input type='text'
                         value={address}
-                        className='wideInput'
                         onChange={(e) => setAddress(e.target.value)}
                         placeholder='Address' />
                 </label>
-                <label>
+                <div className='city'>
                     City
                     <span>{errors.city}</span>
                     <input type='text'
                         value={city}
-                        className='city'
                         onChange={(e) => setCity(e.target.value)}
                         placeholder='City' />
-                </label>
-
-                ,
-                <label>
+                </div>
+                <div className='state'
+                >
                     State
                     <span>{errors.state}</span>
                     <input type='text'
                         value={state}
-                        className='state'
                         onChange={(e) => setState(e.target.value)}
                         placeholder='State' />
-                </label>
-                <label>
+                </div>
+                <div className='lat'>
                     Latitude
                     <span>{errors.lat}</span>
                     <input type='text'
                         value={lat}
-                        className='lat'
                         onChange={(e) => setLat(e.target.value)}
                         placeholder='Latitude' />
-                </label>
-                ,
-                <label>
+                </div>
+                <div className='lng'>
                     Longitude
                     <span>{errors.lng}</span>
                     <input type='text'
                         value={lng}
-                        className='lng'
                         onChange={(e) => setLng(e.target.value)}
                         placeholder='Logitude' />
-                </label>
+                </div>
+                <div className='divider' />
                 <h2>Describe your place to guests</h2>
                 <h3>Mention the best features of your space, any special amenities like fast wifi or parking, and what you love about the neighborhood.</h3>
-                <label>
+                <span>{errors.description}</span>
+                <label className='wideInput'>
                     <textarea
                         value={description}
                         className='description'
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder='Please write at least 30 characters' />
-                    <span>{errors.description}</span>
                 </label>
+                <div className='divider' />
                 <h2>Create a title for your spot</h2>
                 <h3>{`Catch guests' attention with a spot title that highlights what makes your place special.`}</h3>
-                <label>
+                <span>{errors.name}</span>
+                <label className='wideInput'>
                     <input type='text'
                         value={name}
-                        className='wideInput'
                         onChange={(e) => setName(e.target.value)}
                         placeholder='Name of your spot' />
-                    <span>{errors.name}</span>
                 </label>
+                <div className='divider' />
                 <h2>Set a base price for your spot</h2>
                 <h3>Competitive pricing can help your listing stand out and rank higher in search results.</h3>
-                <label>
+                <span>{errors.price}<br /></span>
+                <div className='price'>
                     $
                     <input type='text'
                         value={price}
-                        className='price'
                         onChange={(e) => setPrice(e.target.value)}
                         placeholder='Price per night (USD)' />
-                    <span>{errors.price}</span>
-                </label>
+                </div>
+                <div className='divider' />
                 <div className={`photos ${type === 'create' ? '' : 'hidden'}`}>
 
                     <h2>Liven up your spot with photos</h2>
@@ -257,8 +251,10 @@ const CreateSpotForm = ({ type }) => {
                         placeholder='Image URL' />
                     <span>{errors[4]}</span>
 
+                    <div className='divider' />
                 </div>
-                <input type='submit' value={`${type} spot`} />
+
+                <input type='submit' className='submitSpot' value={`${type[0].toUpperCase() + type.slice(1)} Spot`} />
             </form>
 
         </>

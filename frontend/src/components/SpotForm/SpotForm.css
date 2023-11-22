@@ -1,11 +1,155 @@
+.spotForm {
+    width: 500px;
+    margin: auto;
+    display: flex;
+    justify-content: start;
+    flex-wrap: wrap;
+}
+
+.spotForm>h2,
+.photos>h2 {
+    margin-left: 0px;
+}
+
+.spotForm>h3 {
+    font-weight: 300;
+}
+
+.spotForm>label,
+.spotForm>div {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.spotForm>label>input,
+.spotForm>div>input {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    box-sizing: border-box;
+}
+
+.spotForm>label>input {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.city {
+    width: 60%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 6%
+}
+
+.city>input {
+    width: 100%
+}
+
+.state {
+    width: 34%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.state>input {
+    width: 100%
+}
+
+.lat {
+    width: 47%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 6%;
+}
+
+.lat>input {
+    width: 100%
+}
+
+.lng {
+    width: 47%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.lng>input {
+    width: 100%
+}
+
+.wideInput {
+    width: 100%;
+}
+
 form>span {
-    color: red
+    color: red;
+    font-size: 14px;
 }
 
 form>label>span {
-    color: red
+    color: red;
+    padding-left: 10px;
+    font-size: 14px;
+}
+
+form>div>span {
+    color: red;
+    font-size: 14px;
+    padding-left: 8px;
+}
+
+textarea {
+    margin-bottom: 5px;
+    margin-top: 10px;
+    width: 100%;
+    font-family: sans-serif;
+}
+
+.price {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.price>input {
+    width: 98%;
+    box-sizing: border-box;
+}
+
+.divider {
+    height: 0px;
+    width: 100%;
+    border-bottom: 1px solid black;
+    padding-top: 15px;
+}
+
+.photos>span {
+    color: red;
+    font-size: 14px;
+}
+
+.photos>input {
+    margin-bottom: 0px;
+}
+
+.submitSpot {
+    width: 100%;
+    height: 40px;
+    background-color: #FF385C;
+    border-radius: 5px;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.submitSpot:hover {
+    background-color: #de3554;
 }
 
 .hidden {
-    visibility: none;
+    display: none;
 }

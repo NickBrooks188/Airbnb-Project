@@ -16,3 +16,22 @@ a {
     text-decoration: none;
     color: black
 }
+
+
+.yesDelete,
+.noDelete {
+    width: 45%;
+}
+
+.noDelete {
+    background-color: #333;
+}
+
+.noDelete:hover {
+    background-color: #444;
+}
+
+#modal-content>h3 {
+    font-weight: normal;
+    margin-top: 0px;
+}

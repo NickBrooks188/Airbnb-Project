@@ -34,7 +34,7 @@ const CreateReviewModal = ({ numReviews, spotId }) => {
         <form onSubmit={onSubmit}>
             <h1>How was your stay?</h1>
             <span>{errors.review}</span>
-            <textarea className='reviewText' value={review} onChange={(e) => setReview(e.target.value)}></textarea>
+            <textarea className='reviewText' value={review} placeholder="Describe your experience" onChange={(e) => setReview(e.target.value)}></textarea>
             <span>{errors.stars}</span>
 
             <div className='starWrapper'>
@@ -47,7 +47,7 @@ const CreateReviewModal = ({ numReviews, spotId }) => {
 
             </div>
 
-            <input type='submit' value='Submit Your Review' />
+            <input type='submit' className="submitReviewButton" value='Submit Your Review' />
         </form>
     )
 }

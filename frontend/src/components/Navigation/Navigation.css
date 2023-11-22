@@ -25,6 +25,10 @@ nav>ul>li {
     list-style-type: none;
 }
 
+nav>a>img {
+    height: 40px;
+}
+
 .openModalButton {
     width: 100px;
     height: 30px;
@@ -46,7 +50,8 @@ nav>ul>li {
     background-color: #FF385C;
     border-radius: 20px;
     color: white;
-    border: none
+    border: none;
+    cursor: pointer;
 }
 
 .profileButton:hover {
@@ -74,11 +79,11 @@ nav>ul>li {
 
 .profile-dropdown>.profile-text {
     padding-left: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
 }
 
 .profile-dropdown>.extra-margin {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .profile-dropdown>li>a {
@@ -103,7 +108,8 @@ nav>ul>li {
     border: none;
     width: 200px;
     height: 36px;
-    margin-top: 10px;
+    margin-top: 15px;
+    margin-bottom: 10px;
     border-radius: 3px;
     margin-left: 20px;
     font-size: 16px;

@@ -18,7 +18,7 @@ const Home = () => {
     if (!spotsArr.length) return null
     return (
         <>
-            <h2>Home component</h2>
+            <h2>Spots</h2>
             <div className='spotTileWrapper'>
                 {spotsArr.map((spot) => (<SpotTile spot={spot} key={spot.id} />)
                 )}

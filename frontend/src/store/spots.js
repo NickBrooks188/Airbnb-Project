@@ -145,7 +145,7 @@ const spotsReducer = (state = initialState, action) => {
         }
         case REMOVE_REVIEW_FROM_SPOT: {
             const newState = { ...state }
-            if (newState[action.spotId]) newState[action.spotId].avgRating = action.avgRating
+            if (newState[action.spotId]) newState[action.spotId].avgRating = action.avgStars
             return newState
         }
         default:
