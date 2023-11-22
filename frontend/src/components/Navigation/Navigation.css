@@ -107,7 +107,7 @@ nav>a>img {
 }
 
 .profile-dropdown>li>a:hover {
-    background-color: #EEE;
+    background-color: #F7F7F7;
 }
 
 .profile-dropdown>li>button {
@@ -130,10 +130,11 @@ nav>a>img {
 
 .newSpotLink {
     margin-right: 13px;
-    color: #0066CC;
     font-size: 16px;
+    border-radius: 30px;
+    padding: 15px;
 }
 
 .newSpotLink:hover {
-    text-decoration: underline;
+    background-color: #F7F7F7
 }
