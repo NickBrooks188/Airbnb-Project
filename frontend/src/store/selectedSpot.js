@@ -90,7 +90,7 @@ const selectedSpotReducer = (state = initialState, action) => {
             newState.avgRating = (avgRating * numReviews + action.review.stars) / (numReviews + 1)
             newState.numReviews++
             const newReviewWithUser = { ...action.review, User: { id: action.user.id, firstName: action.user.firstName } }
-            newState.Reviews.push(newReviewWithUser)
+            newState.Reviews = [...state.Reviews, newReviewWithUser]
             return newState
         }
         case DELETE_REVIEW: {
@@ -99,7 +99,7 @@ const selectedSpotReducer = (state = initialState, action) => {
             reviews.splice(action.reviewIndex)
             newState.numReviews--
             newState.avgRating = action.avgRating
-            newState.Reviews = reviews
+            newState.Reviews = [...reviews]
             return newState
         }
         default:

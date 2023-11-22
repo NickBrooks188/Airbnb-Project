@@ -33,7 +33,7 @@ const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<Home />} />
     <Route path='/spots' element={<Outlet />}>
       <Route path=':spotId' element={<SpotDetails />} />
-      <Route path=':spotId/edit' element={<SpotForm type={'edit'} />} />
+      <Route path=':spotId/edit' element={<SpotForm type={'update'} />} />
       <Route path='new' element={<SpotForm type={'create'} />} />
       <Route path='current' element={<UserSpots />} />
     </Route>

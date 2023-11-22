@@ -12,7 +12,7 @@ const CreateSpotForm = ({ type }) => {
 
     useEffect(() => {
         const runDispatches = async () => {
-            if (type === 'edit') await dispatch(getSingleSpot(spotId))
+            if (type === 'update') await dispatch(getSingleSpot(spotId))
             else await dispatch(unsetSpot())
         }
         runDispatches()
@@ -86,7 +86,7 @@ const CreateSpotForm = ({ type }) => {
             price: parseFloat(price)
         }
 
-        if (!images[0]) {
+        if (!images[0] && type === 'create') {
             setErrors({
                 0: 'Preview image is required'
             })
@@ -111,7 +111,7 @@ const CreateSpotForm = ({ type }) => {
             }
         }
         if (type === 'create') handleSpotCreation(form)
-        if (type === 'edit') {
+        if (type === 'update') {
             handleSpotEdit(form)
         }
     }
@@ -121,7 +121,7 @@ const CreateSpotForm = ({ type }) => {
         title = (<h1>Create a new Spot</h1>)
     }
 
-    if (type === 'edit') {
+    if (type === 'update') {
         title = (<h1>Update your Spot</h1>)
     }
     return (

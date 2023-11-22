@@ -40,7 +40,7 @@ function Navigation({ isLoaded }) {
 
     return (
         <nav>
-            <NavLink to="/"><img src='./SpotsLogo.svg' /></NavLink>
+            <NavLink to="/"><img src='https://i.postimg.cc/948WmvJ5/Spots-Logo.png' /></NavLink>
             <ul>
                 {sessionUser && createNewSpot}
                 {isLoaded && sessionLinks}
