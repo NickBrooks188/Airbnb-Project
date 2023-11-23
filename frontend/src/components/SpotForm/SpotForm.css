@@ -16,23 +16,19 @@
     font-weight: 300;
 }
 
-.spotForm>label,
 .spotForm>div {
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
-.spotForm>label>input,
-.spotForm>div>input {
+.wideInput>input,
+.city>input,
+.state>input,
+.lat>input,
+.lng>input {
     margin-top: 10px;
     margin-bottom: 5px;
     box-sizing: border-box;
-}
-
-.spotForm>label>input {
-    margin-top: 5px;
-    margin-bottom: 10px;
-    width: 100%;
 }
 
 .city {
@@ -81,6 +77,10 @@
     width: 100%;
 }
 
+.wideInput>input {
+    width: 100%;
+}
+
 form>span {
     color: red;
     font-size: 14px;
@@ -96,7 +96,7 @@ form>div>span {
     color: red;
     font-size: 14px;
     padding-left: 8px;
-    padding-top: 1px;
+    padding-top: 2px;
 }
 
 textarea {
@@ -108,16 +108,33 @@ textarea {
 
 .price {
     width: 100%;
+    height: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: nowrap;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding-left: 5px;
 }
 
-.price>input {
-    width: 98%;
-    box-sizing: border-box;
+.price:hover {
+    border: 1px solid #555;
 }
+
+.price:focus {
+    border: 2px solid blue;
+}
+
+.priceInput {
+    width: 97%;
+    border: none;
+    box-sizing: border-box;
+    height: 100%;
+}
+
+
 
 .divider {
     height: 0px;
@@ -132,7 +149,7 @@ textarea {
 }
 
 .photos>input {
-    margin-bottom: 0px;
+    margin-bottom: 5px;
 }
 
 .submitSpot {

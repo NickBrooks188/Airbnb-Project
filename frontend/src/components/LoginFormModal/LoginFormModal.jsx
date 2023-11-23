@@ -12,16 +12,23 @@ function LoginFormModal() {
     const [errors, setErrors] = useState({})
     const { closeModal } = useModal()
 
-
+    const loginDemoUser = async () => {
+        setErrors({})
+        const data = await dispatch(sessionActions.login({ credential: 'demouser', password: 'password' }))
+        if (data?.message) {
+            setErrors(data)
+        } else {
+            closeModal()
+        }
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         setErrors({})
         const data = await dispatch(sessionActions.login({ credential, password }))
         console.log(data)
-        if (data.message) {
-            console.log(data)
-            if (data?.message) setErrors(data)
+        if (data?.message) {
+            setErrors(data)
         } else {
             closeModal()
         }
@@ -46,7 +53,7 @@ function LoginFormModal() {
                 {errors.message && <span>The provided credentials were invalid</span>}
                 <button type="submit" disabled={(credential.length < 4 || password.length < 6)}>Log In</button>
             </form>
-            <div className='demo-user'>Demo user</div>
+            <div className='demoUser' onClick={loginDemoUser}>Log in as demo user</div>
         </>
     )
 }

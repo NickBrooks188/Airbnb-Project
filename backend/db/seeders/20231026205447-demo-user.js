@@ -14,37 +14,72 @@ const { User } = require('../models')
 const users = [
   {
     email: 'test@gmail.com',
-    username: 'testuser',
-    firstName: 'Test',
-    lastName: 'Testman',
+    username: 'demouser',
+    firstName: 'Demo',
+    lastName: 'User',
     hashedPassword: bcrypt.hashSync('password')
   },
   {
     email: 'best@gmail.com',
     username: 'bestUser',
-    firstName: 'Best',
-    lastName: 'Bestman',
+    firstName: 'John',
+    lastName: 'Testman',
     hashedPassword: bcrypt.hashSync('password')
   },
   {
     email: 'west@gmail.com',
     username: 'westUser',
-    firstName: 'West',
-    lastName: 'Westman',
+    firstName: 'Joe',
+    lastName: 'Testman',
     hashedPassword: bcrypt.hashSync('password')
   },
   {
     email: 'vest@gmail.com',
     username: 'vestUser',
-    firstName: 'Vest',
-    lastName: 'Vestman',
+    firstName: 'Jacob',
+    lastName: 'Testman',
     hashedPassword: bcrypt.hashSync('password')
   },
   {
     email: 'lest@gmail.com',
     username: 'lestUser',
-    firstName: 'Lest',
-    lastName: 'Lestman',
+    firstName: 'Jason',
+    lastName: 'Testman',
+    hashedPassword: bcrypt.hashSync('password')
+  },
+  {
+    email: 'nest@gmail.com',
+    username: 'nestUser',
+    firstName: 'Jack',
+    lastName: 'Testman',
+    hashedPassword: bcrypt.hashSync('password')
+  },
+  {
+    email: 'pest@gmail.com',
+    username: 'pestUser',
+    firstName: 'James',
+    lastName: 'Testman',
+    hashedPassword: bcrypt.hashSync('password')
+  },
+  {
+    email: 'fest@gmail.com',
+    username: 'festUser',
+    firstName: 'Jonah',
+    lastName: 'Testman',
+    hashedPassword: bcrypt.hashSync('password')
+  },
+  {
+    email: 'rest@gmail.com',
+    username: 'restUser',
+    firstName: 'Jim',
+    lastName: 'Testman',
+    hashedPassword: bcrypt.hashSync('password')
+  },
+  {
+    email: 'zest@gmail.com',
+    username: 'zestUser',
+    firstName: 'Jacques',
+    lastName: 'Testman',
     hashedPassword: bcrypt.hashSync('password')
   }
 ]
@@ -74,7 +109,7 @@ module.exports = {
 
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      username: { [Op.in]: ['testuser', 'bestUser', 'westUser', 'vestUser', 'lestUser'] }
+      username: { [Op.in]: ['demouser', 'bestUser', 'westUser', 'vestUser', 'lestUser', 'zestUser', 'pestUser', 'restUser', 'nestUser', 'festUser'] }
     }, {});
   }
 };
