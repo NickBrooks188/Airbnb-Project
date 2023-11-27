@@ -8,8 +8,6 @@ import './UserSpots.css'
 const UsersSpots = () => {
     const dispatch = useDispatch()
     const userSpots = useSelector(state => state.userSpots)
-
-    console.log(userSpots)
     useEffect(() => {
         const loadUserSpots = async () => {
             await dispatch(getUserSpots())
@@ -18,14 +16,18 @@ const UsersSpots = () => {
     }, [dispatch])
 
     console.log(userSpots.Spots)
-    if (!userSpots.Spots) return (<h2>Users Spots</h2>)
-
-    return (
+    if (!userSpots.Spots || !Object.values(userSpots.Spots).length) return (
         <>
             <h2>Manage your spots</h2>
             <Link to='/spots/new'>
                 <button className="createNewSpot">Create a New Spot</button>
             </Link>
+        </>
+    )
+
+    return (
+        <>
+            <h2>Manage your spots</h2>
             <div className='userSpotTileWrapper'>
                 {Object.values(userSpots.Spots).map((spot) => (<UserSpotTile spot={spot} key={spot.id} />))}
             </div>

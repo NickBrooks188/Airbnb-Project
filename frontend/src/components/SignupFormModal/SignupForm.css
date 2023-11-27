@@ -10,6 +10,8 @@
 
 #modal-content>form>label>span {
     margin-left: 20px;
+    color: red;
+    font-size: 14px;
 }
 
 .signupForm>button {
