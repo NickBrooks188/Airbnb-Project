@@ -118,7 +118,7 @@ const spotImages = [{
   preview: true
 }, {
   spotId: 9,
-  url: 'https://sph.washington.edu/sites/default/files/inline-images/Seattle-Rainier%201200x600_0.jpg',
+  url: 'https://media.king5.com/assets/KING/images/1073c173-b118-49e7-affa-40ae7f5b2228/1073c173-b118-49e7-affa-40ae7f5b2228_1140x641.jpg',
   preview: true
 }]
 
