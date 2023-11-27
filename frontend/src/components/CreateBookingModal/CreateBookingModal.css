@@ -1,0 +1,23 @@
+/* #modal-content>input[type=date] {
+    margin-bottom: 200px;
+    background-color: blue;
+} */
+
+.dateLabel {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    width: 65%;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.createBookingButton {
+    margin: 20px;
+    width: 250px;
+}
+
+.error {
+    color: red;
+    width: 65%
+}

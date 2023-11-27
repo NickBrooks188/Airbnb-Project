@@ -9,7 +9,6 @@ const ConfirmSpotDeleteModal = ({ spotId }) => {
     const confirmDelete = async () => {
         const res = await dispatch(removeSpot(spotId))
         const data = await res.json()
-        console.log(data)
         if (res.ok) {
             await dispatch(removeUserSpot(spotId))
             closeModal()

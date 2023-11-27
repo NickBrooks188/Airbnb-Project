@@ -79,7 +79,7 @@
 }
 
 .booking {
-    width: 350px;
+    width: 370px;
     border: 3px solid black;
     border-radius: 5px;
     padding: 20px;
@@ -95,9 +95,10 @@
     font-size: 18px;
 }
 
-.bookingButton {
+.booking>.openModalButton {
     width: 340px;
     margin: 0px;
+    height: 40px;
 }
 
 .reviewsWrapper {

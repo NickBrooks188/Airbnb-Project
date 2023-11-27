@@ -70,6 +70,15 @@ export const removeReviewFromSingleSpot = (reviewId, reviewIndex, avgRating) => 
     return res
 }
 
+export const createBookingForSpot = (spotId, booking) => async () => {
+    const res = await csrfFetch(`/api/spots/${spotId}/bookings`, {
+        method: "POST",
+        body: JSON.stringify(booking)
+    })
+    const data = await res.json()
+    return data
+}
+
 const initialState = {}
 
 const selectedSpotReducer = (state = initialState, action) => {

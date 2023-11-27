@@ -5,6 +5,7 @@ import { getSingleSpot } from '../../store/selectedSpot'
 import OpenModalButton from '../OpenModalButton/OpenModalButton'
 import CreateReviewModal from '../CreateReviewModal/CreateReviewModal'
 import ConfirmReviewDeleteModal from '../ConfirmDeleteModal/ConfirmReviewDeleteModal'
+import CreateBookingModal from '../CreateBookingModal/CreateBookingModal'
 import './SpotDetails.css'
 
 const SpotDetails = () => {
@@ -37,6 +38,13 @@ const SpotDetails = () => {
     if (!spot.Reviews.length && spot.Owner.id != sessionUser?.id) noReviewsNotice = (<p>Be the first to post a review!</p>)
     else reviewFacts = `· ${spot.numReviews} Review${spot.Reviews.length !== 1 ? 's' : ''
         }`
+
+    let reserveButton = ''
+    if (sessionUser && sessionUser.id != spot.Owner.id) reserveButton = (
+        <OpenModalButton
+            buttonText="Reserve"
+            modalComponent={<CreateBookingModal spotId={spotId} sessionUser={sessionUser} />}
+        />)
     return (
         <div className='spotWrapper'>
             <div className='spotHeader'>
@@ -66,7 +74,7 @@ const SpotDetails = () => {
                 <div className='booking'>
                     <h2>{`$${spot.price.toFixed(2)} night`}</h2>
                     <span>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)} ${reviewFacts}`}</span>
-                    <button className='bookingButton' onClick={() => alert('Coming soon!')}>Reserve</button>
+                    {reserveButton}
                 </div>
             </div>
             <div className='reviewsWrapper'>

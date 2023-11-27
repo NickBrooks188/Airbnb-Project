@@ -15,11 +15,11 @@ const validateBookings = [
     check('startDate')
         .exists({ checkFalsy: true })
         // .isDate()
-        .withMessage("Start date must be a provided date"),
+        .withMessage("Start Date must be a provided date"),
     check('endDate')
         .exists({ checkFalsy: true })
         // .isDate()
-        .withMessage("End date must be a provided date"),
+        .withMessage("End Date must be a provided date"),
     handleValidationErrors
 ]
 
@@ -107,7 +107,7 @@ router.put('/:id', requireAuth, validateBookings, async (req, res, next) => {
     if (startTime >= endTime) {
         const err = new Error('Bad Request');
         err.status = 400;
-        err.errors = { 'endDate': "endDate cannot be on or before startDate" };
+        err.errors = { 'endDate': "End Date cannot be on or before Start Date" };
         return next(err);
     }
 
@@ -125,14 +125,14 @@ router.put('/:id', requireAuth, validateBookings, async (req, res, next) => {
         const existingEnd = new Date(existingBooking.endDate).getTime()
 
         if (startTime >= existingStart && startTime <= existingEnd) {
-            errors.startDate = "Start date conflicts with an existing booking"
+            errors.startDate = "Start Date conflicts with an existing booking"
         }
         if (endTime >= existingStart && endTime <= existingEnd) {
-            errors.endDate = "End date conflicts with an existing booking"
+            errors.endDate = "End Date conflicts with an existing booking"
         }
         if (startTime < existingStart && endTime > existingEnd) {
-            errors.startDate = "Start date conflicts with an existing booking"
-            errors.endDate = "End date conflicts with an existing booking"
+            errors.startDate = "Start Date conflicts with an existing booking"
+            errors.endDate = "End Date conflicts with an existing booking"
         }
     }
     if (errors.startDate || errors.endDate) {

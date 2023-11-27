@@ -164,7 +164,7 @@ router.post('/:id/bookings', requireAuth, validateBookings, async (req, res, nex
     if (startTime >= endTime) {
         const err = new Error('Bad Request');
         err.status = 400;
-        err.errors = { 'endDate': "endDate cannot be on or before startDate" };
+        err.errors = { 'endDate': "End Date cannot be on or before Start Date" };
         return next(err);
     }
     const errors = {}
@@ -173,14 +173,14 @@ router.post('/:id/bookings', requireAuth, validateBookings, async (req, res, nex
         const existingEnd = new Date(existingBooking.endDate).getTime()
 
         if (startTime >= existingStart && startTime <= existingEnd) {
-            errors.startDate = "Start date conflicts with an existing booking"
+            errors.startDate = "Start Date conflicts with an existing booking"
         }
         if (endTime >= existingStart && endTime <= existingEnd) {
-            errors.endDate = "End date conflicts with an existing booking"
+            errors.endDate = "End Date conflicts with an existing booking"
         }
         if (startTime < existingStart && endTime > existingEnd) {
-            errors.startDate = "Start date conflicts with an existing booking"
-            errors.endDate = "End date conflicts with an existing booking"
+            errors.startDate = "Start Date conflicts with an existing booking"
+            errors.endDate = "End Date conflicts with an existing booking"
         }
     }
     if (errors.startDate || errors.endDate) {
