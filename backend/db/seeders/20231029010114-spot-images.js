@@ -22,15 +22,15 @@ const spotImages = [{
   preview: true
 }, {
   spotId: 1,
-  url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/LA_Downtown_View_%28cropped%29.jpg/800px-LA_Downtown_View_%28cropped%29.jpg',
-  preview: false
-}, {
-  spotId: 1,
   url: 'https://a.cdn-hotels.com/gdcs/production14/d1087/59523f11-21cb-4a60-8d14-c61ccac2da6e.jpg?impolicy=fcrop&w=800&h=533&q=medium',
   preview: false
 }, {
   spotId: 1,
   url: 'https://i.natgeofe.com/n/83f47b50-d872-4126-a163-3025c4104090/losangeles.jpeg',
+  preview: false
+}, {
+  spotId: 1,
+  url: 'https://lacounty.gov/wp-content/uploads/2022/03/shutterstock_1418018357-scaled.jpg',
   preview: false
 }, {
   spotId: 1,
