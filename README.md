@@ -47,13 +47,13 @@ Instructions:
 
 
 ## Website screenshots
-Landing page
+### Landing page
 ![landing-page](./images/LandingPage.png)
 
-Spot details
+### Spot details
 ![spot-details](./images/SpotDetails.png)
 
-Spot creation
+### Spot creation
 ![spot-creation](./images/SpotCreation.png)
 
 
