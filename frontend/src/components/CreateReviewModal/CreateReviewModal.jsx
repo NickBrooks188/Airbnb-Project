@@ -45,7 +45,7 @@ const CreateReviewModal = ({ numReviews, spotId, sessionUser }) => {
 
             </div>
 
-            <button type='submit' className="submitReviewButton" disabled={review.length < 10}>Submit Your Review</button>
+            <button type='submit' className="submitReviewButton" disabled={review.length < 10 || stars < 1}>Submit Your Review</button>
         </form>
     )
 }

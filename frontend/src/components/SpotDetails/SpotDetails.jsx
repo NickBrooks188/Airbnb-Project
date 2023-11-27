@@ -35,7 +35,7 @@ const SpotDetails = () => {
     let noReviewsNotice
     let reviewFacts = ''
     if (!spot.Reviews.length && spot.Owner.id != sessionUser?.id) noReviewsNotice = (<p>Be the first to post a review!</p>)
-    else reviewFacts = `· ${spot.numReviews} review${spot.Reviews.length !== 1 ? 's' : ''
+    else reviewFacts = `· ${spot.numReviews} Review${spot.Reviews.length !== 1 ? 's' : ''
         }`
     return (
         <div className='spotWrapper'>
