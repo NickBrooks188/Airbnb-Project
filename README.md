@@ -48,13 +48,13 @@ Instructions:
 
 ## Website screenshots
 Landing page
-[landing-page]: ./images/LandingPage.png
+![landing-page](./images/LandingPage.png)
 
 Spot details
-[spot-details]: ./images/SpotDetails.png
+![spot-details](./images/SpotDetails.png)
 
 Spot creation
-[spot-creation]: ./images/SpotCreation.png
+![spot-creation](./images/SpotCreation.png)
 
 
 ## Database Schema Design
