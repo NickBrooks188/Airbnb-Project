@@ -11,9 +11,9 @@ const SpotTile = ({ spot }) => {
                     </div>
                     <div className='locationRatings'>
                         <p>{`${spot.city}, ${spot.state}`}</p>
-                        <span>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)}`}</span>
+                        <span>{`★ ${(spot.avgRating == "Not available") ? 'New' : (spot.avgRating && spot?.avgRating.toFixed(2)) || 0}`}</span>
                     </div>
-                    <span><b>${spot.price.toFixed(2)}</b> night</span>
+                    <span><b>${spot?.price.toFixed(2)}</b> night</span>
                     <div className='spotTileTooltip'>{spot.name}</div>
                 </div>
             </Link>
