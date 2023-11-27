@@ -1,9 +1,61 @@
 <!--!!START SILENT -->
-# Module 4 Project
+# Spots
 <!--!!END -->
 <!--!!ADD -->
 <!-- # Project - Week 13 -->
 <!--!!END_ADD -->
+Spots is a webite clonse, based off Airbnb. Within the website, users can:
+* Login
+* Signup
+* View all spots
+* View a spot’s details (including reviews)
+* Create a spot
+* Edit a spot (that the user owns)
+* Delete a spot (that the user owns)
+* Create a review
+* Delete a review (that the user owns)
+
+Link to live website: https://airbnb-project-j2wl.onrender.com/
+
+## Tech stack
+
+This project was bult using:
+* Javascipt
+* React
+* Redux
+* Sequelize
+* Express
+* Postgres
+* CSS
+* HTML
+* Render.com
+
+## Running locally
+
+Instructions:
+* Clone the project with git clone https://github.com/NickBrooks188/Week13-Project.git
+* ```cd``` into the backend directory
+* ```npm i```
+* ```npx sequelize dotenv db:migrate```
+* ```npx sequelize dotenv db:seed:all```
+* ```npm start```
+* In a new terminal instance, ```cd``` into the frontend directory
+* ```npm i```
+* ```npm run dev```
+* Open a browser and navigate to https://localhost:5173
+
+
+
+## Website screenshots
+Landing page
+[landing-page]: ./images/LandingPage.png
+
+Spot details
+[spot-details]: ./images/SpotDetails.png
+
+Spot creation
+[spot-creation]: ./images/SpotCreation.png
+
 
 ## Database Schema Design
 
