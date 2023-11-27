@@ -1,7 +1,5 @@
 import { useDispatch } from 'react-redux'
 import { useModal } from '../../context/Modal'
-import { removeSpot } from '../../store/spots'
-import { removeUserSpot } from '../../store/userSpots.js'
 import { useState } from 'react'
 import './CreateBookingModal.css'
 import { createBookingForSpot } from '../../store/selectedSpot'
