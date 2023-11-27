@@ -104,6 +104,22 @@ const spotImages = [{
   spotId: 5,
   url: 'https://a.travel-assets.com/findyours-php/viewfinder/images/res70/476000/476367-Downtown-San-Francisco.jpg',
   preview: false
+}, {
+  spotId: 6,
+  url: 'https://texashillcountryoliveco.com/cdn/shop/articles/the-perfect-itinerary-for-3-days-in-austin-tx-a-locals-guide-776189.jpg?v=1681827891',
+  preview: true
+}, {
+  spotId: 7,
+  url: 'https://www.visittheusa.com/sites/default/files/styles/hero_l/public/images/hero_media_image/2017-01/HERO_GettyImages-542201276_Web72DPI.jpg?h=119335f7&itok=_n7H4utA',
+  preview: true
+}, {
+  spotId: 8,
+  url: 'https://www.getawaymavens.com/wp-content/uploads/2019/01/Westin-Peachtree-Atlanta.jpg',
+  preview: true
+}, {
+  spotId: 9,
+  url: 'https://sph.washington.edu/sites/default/files/inline-images/Seattle-Rainier%201200x600_0.jpg',
+  preview: true
 }]
 
 
