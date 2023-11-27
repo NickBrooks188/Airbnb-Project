@@ -121,6 +121,8 @@ const spotsReducer = (state = initialState, action) => {
         case UPDATE_SPOT: {
             const newState = { ...state }
             newState[action.spot.id] = action.spot
+            newState[action.spot.id].avgRating = state[action.spot.id].avgRating
+            newState[action.spot.id].previewImage = state[action.spot.id].previewImage
             return newState
         }
         case DELETE_SPOT: {

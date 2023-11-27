@@ -16,7 +16,7 @@ const UserSpotTile = ({ spot }) => {
                         <span>{`★ ${(spot.avgRating == "Not available") ? 'New' : spot.avgRating.toFixed(2)}`}</span>
 
                     </div>
-                    <span><b>{spot.price.toFixed(2)}</b> night</span>
+                    <span><b>${spot.price.toFixed(2)}</b> night</span>
                 </div>
             </Link>
             <Link to={`/spots/${spot.id}/edit`}>
