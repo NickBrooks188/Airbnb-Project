@@ -28,7 +28,7 @@ const reviews = [{
 },
 {
   spotId: 1,
-  userId: 5,
+  userId: 8,
   review: 'Cool spot with some good amenities.',
   stars: 4
 },
@@ -53,13 +53,13 @@ const reviews = [{
 {
   spotId: 4,
   userId: 5,
-  review: "The location can't be beat and the view is amazing. That said, the images don't really convery how small the spot it.",
+  review: "The location can't be beat and the view is amazing. That said, the images don't really convey how small the spot it.",
   stars: 4
 },
 {
   spotId: 5,
   userId: 6,
-  review: "The location can't be beat and the view is amazing. That said, the images don't really convery how small the spot it.",
+  review: "The location can't be beat and the view is amazing. That said, the images don't really convey how small the spot it.",
   stars: 4
 },
 {
