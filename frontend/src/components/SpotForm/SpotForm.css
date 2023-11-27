@@ -86,17 +86,11 @@ form>span {
     font-size: 14px;
 }
 
-form>label>span {
-    color: red;
-    padding-left: 10px;
-    font-size: 14px;
-}
-
 form>div>span {
     color: red;
     font-size: 14px;
     padding-left: 8px;
-    padding-top: 2px;
+    padding-top: 0px;
 }
 
 textarea {
@@ -133,8 +127,6 @@ textarea {
     box-sizing: border-box;
     height: 100%;
 }
-
-
 
 .divider {
     height: 0px;
