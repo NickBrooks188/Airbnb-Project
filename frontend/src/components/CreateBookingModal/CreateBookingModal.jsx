@@ -17,7 +17,6 @@ const CreateBookingModal = ({ spotId }) => {
             endDate
         }
         const data = await dispatch(createBookingForSpot(spotId, booking))
-        console.log(data)
         if (data.errors) {
             setErrors(data.errors)
         } else {

@@ -12,6 +12,8 @@ const ConfirmSpotDeleteModal = ({ spotId }) => {
         if (res.ok) {
             await dispatch(removeUserSpot(spotId))
             closeModal()
+        } else {
+            alert(data)
         }
     }
 
