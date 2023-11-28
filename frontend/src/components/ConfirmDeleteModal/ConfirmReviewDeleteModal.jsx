@@ -7,6 +7,8 @@ const ConfirmReviewDeleteModal = ({ numReviews, avgRating, review, spot }) => {
     const { closeModal } = useModal()
     const dispatch = useDispatch()
 
+
+    console.log('~~~~~~~~', spot)
     const confirmDelete = async () => {
         const reviewStars = review.stars
         let newAvg = (numReviews == 1 ? "Not available" : (avgRating * numReviews - reviewStars) / (numReviews - 1))
@@ -14,6 +16,7 @@ const ConfirmReviewDeleteModal = ({ numReviews, avgRating, review, spot }) => {
         const res = await dispatch(removeReviewFromSingleSpot(review.id, reviewIndex, newAvg))
         if (res.ok) {
             dispatch(removeReviewFromSpot(spot.id, newAvg))
+            console.log(`------`, spot)
             closeModal()
         } else {
             const data = await res.json()
