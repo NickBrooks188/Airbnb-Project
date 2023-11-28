@@ -26,7 +26,6 @@ function LoginFormModal() {
         e.preventDefault()
         setErrors({})
         const data = await dispatch(sessionActions.login({ credential, password }))
-        console.log(data)
         if (data?.message) {
             setErrors(data)
         } else {

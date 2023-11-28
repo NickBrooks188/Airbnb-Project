@@ -29,7 +29,6 @@ const SignupFormModal = () => {
                     password
                 })
             )
-            console.log(data)
             if (data.errors) {
                 setErrors(data.errors)
             } else {

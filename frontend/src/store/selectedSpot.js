@@ -94,8 +94,6 @@ const selectedSpotReducer = (state = initialState, action) => {
             const numReviews = newState.numReviews
             let avgRating = newState.avgRating
             if (avgRating == 'Not available') avgRating = 0
-            console.log('numReviews', numReviews)
-            console.log('avgRating', avgRating)
             newState.avgRating = (avgRating * numReviews + action.review.stars) / (numReviews + 1)
             newState.numReviews++
             const newReviewWithUser = { ...action.review, User: { id: action.user.id, firstName: action.user.firstName } }

@@ -15,7 +15,6 @@ const UsersSpots = () => {
         loadUserSpots()
     }, [dispatch])
 
-    console.log(userSpots.Spots)
     if (!userSpots.Spots || !Object.values(userSpots.Spots).length) return (
         <>
             <h2>Manage your spots</h2>

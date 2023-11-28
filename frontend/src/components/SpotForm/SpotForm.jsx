@@ -43,7 +43,6 @@ const CreateSpotForm = ({ type }) => {
         setName(existingSpotData.name || '')
         setPrice(existingSpotData.price || '')
         if (existingSpotData.SpotImages) {
-            console.log(existingSpotData.SpotImages)
             let imagesArr = []
             const previewImage = existingSpotData.SpotImages.find(image => image.preview == true)
             if (previewImage) imagesArr.push(previewImage.url)
