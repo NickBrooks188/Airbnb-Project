@@ -18,7 +18,7 @@ Spots is a webite clonse, based off Airbnb. Within the website, users can:
 
 Link to live website: https://airbnb-project-j2wl.onrender.com/
 
-## Tech stack
+## 💻 Tech stack
 
 This project was bult using:
 * Javascipt
@@ -31,7 +31,19 @@ This project was bult using:
 * HTML
 * Render.com
 
-## Running locally
+  <div>
+   <img src="https://raw.githubusercontent.com/devicons/devicon/55609aa5bd817ff167afce0d965585c92040787a/icons/javascript/javascript-original.svg" alt="JavaScript" width="40" height="40">
+   <img src="https://github.com/devicons/devicon/blob/master/icons/html5/html5-original.svg" title="HTML5" alt="HTML" width="40" height="40"/>&nbsp;
+   <img src="https://github.com/devicons/devicon/blob/master/icons/css3/css3-plain-wordmark.svg"  title="CSS3" alt="CSS" width="40" height="40"/>&nbsp;
+   <img src="https://github.com/devicons/devicon/blob/master/icons/react/react-original-wordmark.svg" title="React" alt="React" width="40" height="40"/>&nbsp;
+   <img src="https://github.com/devicons/devicon/blob/master/icons/redux/redux-original.svg" title="Redux" alt="Redux " width="40" height="40"/>&nbsp;
+   <img src="https://github.com/devicons/devicon/blob/master/icons/postgresql/postgresql-original.svg" title="PostgreSQL" alt="PostgreSQL " width="40" height="40"/>&nbsp;
+   <img src="https://github.com/devicons/devicon/blob/master/icons/git/git-original-wordmark.svg" title="Git" **alt="Git" width="40" height="40"/>
+   <img src="https://google.github.io/sqlcommenter/images/sequelize-logo.png" title="Git" **alt="Git" height="40"/>
+
+</div>
+
+## ⚙️ Running locally
 
 Instructions:
 * Clone the project with git clone https://github.com/NickBrooks188/Week13-Project.git
@@ -47,7 +59,7 @@ Instructions:
 
 
 
-## Website screenshots
+## 🖼️ Application screenshots
 ### Landing page
 ![landing-page](./images/LandingPage.png)
 
@@ -66,7 +78,7 @@ Instructions:
 [airbnb-database-schema]: ./images/airbnb_dbdiagram.png
 [airbnb-db-diagram-info]: https://appacademy-open-assets.s3.us-west-1.amazonaws.com/Modular-Curriculum/content/week-12/airbnb-db-diagram-info.txt
 
-## API Documentation
+## 🗒️ API Documentation
 
 ## USER AUTHENTICATION/AUTHORIZATION
 
