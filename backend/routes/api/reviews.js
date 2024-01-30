@@ -83,7 +83,6 @@ router.get('/current', requireAuth, async (req, res) => {
     for (let review of reviews) {
         review = await review.toJSON()
         let previewImage
-        console.log(review.Spot.SpotImages)
         for (let spotImage of review.Spot.SpotImages) {
             if (spotImage.preview) {
                 review.Spot.previewImage = spotImage.url
