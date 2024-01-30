@@ -240,7 +240,6 @@ router.get('/:id/bookings', requireAuth, async (req, res) => {
     // find all bookings with spotId matching the spot's id, with more attributes if user is the owner
     let bookingAttributes = []
     if (!owner) { bookingAttributes = ['id', 'userId', 'createdAt', 'updatedAt'] }
-    console.log(bookingAttributes)
     const bookings = await Booking.findAll({
         where: {
             spotId: spot.id
@@ -249,7 +248,6 @@ router.get('/:id/bookings', requireAuth, async (req, res) => {
             exclude: bookingAttributes
         }
     })
-    console.log(bookings)
     let userIdArray = []
     for (let booking of bookings) {
         if (userIdArray.indexOf(booking.userId) === -1) userIdArray.push(booking.userId)
