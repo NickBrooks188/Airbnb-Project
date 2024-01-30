@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import { getAllSpots } from '../../store/spots'
 import SpotTile from '../SpotTile/SpotTile'
+import { Link } from 'react-router-dom'
 import './Home.css'
 
 
@@ -23,6 +24,9 @@ const Home = () => {
                 {spotsArr.map((spot) => (<SpotTile spot={spot} key={spot.id} />)
                 )}
 
+            </div>
+            <div className='footer'>
+                Created by Nick Brooks | <Link to='https://github.com/NickBrooks188'><i className="fa-brands fa-github"></i></Link> <Link to='https://www.linkedin.com/in/nick-brooks-531661153/'><i className="fa-brands fa-linkedin"></i></Link>
             </div>
         </>
 
