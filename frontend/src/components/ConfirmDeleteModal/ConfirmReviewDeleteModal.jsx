@@ -17,7 +17,6 @@ const ConfirmReviewDeleteModal = ({ numReviews, avgRating, review, spot }) => {
             closeModal()
         } else {
             const data = await res.json()
-            console.log(data)
         }
     }
 
