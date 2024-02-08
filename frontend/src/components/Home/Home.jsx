@@ -26,7 +26,7 @@ const Home = () => {
 
             </div>
             <div className='footer'>
-                Created by Nick Brooks | <Link to='https://github.com/NickBrooks188'><i className="fa-brands fa-github"></i></Link> <Link to='https://www.linkedin.com/in/nick-brooks-531661153/'><i className="fa-brands fa-linkedin"></i></Link>
+                Created by Nick Brooks • <Link to='https://github.com/NickBrooks188'><i className="fa-brands fa-github"></i></Link> <Link to='https://www.linkedin.com/in/nick-brooks-531661153/'><i className="fa-brands fa-linkedin"></i></Link>
             </div>
         </>
 
