@@ -16,7 +16,7 @@ Spots is a webite clonse, based off Airbnb. Within the website, users can:
 * Delete a review (that the user owns)
 * Create a booking
 
-Link to live website: [https://airbnb-project-j2wl.onrender.com/](https://spots-hgdc.onrender.com/)
+Link to live website: [Live demo](https://spots-hgdc.onrender.com/)
 
 ## 💻 Tech stack
 
